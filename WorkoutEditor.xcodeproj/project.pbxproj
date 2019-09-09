@@ -13,6 +13,14 @@
 		7378003C2319359F00E33AA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7378003A2319359F00E33AA0 /* Main.storyboard */; };
 		737800482319359F00E33AA0 /* WorkoutEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800472319359F00E33AA0 /* WorkoutEditorTests.swift */; };
 		737800532319359F00E33AA0 /* WorkoutEditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800522319359F00E33AA0 /* WorkoutEditorUITests.swift */; };
+		737800622319368300E33AA0 /* populate_db_from_json.py in Resources */ = {isa = PBXBuildFile; fileRef = 737800602319368300E33AA0 /* populate_db_from_json.py */; };
+		737800632319368300E33AA0 /* create_db.py in Resources */ = {isa = PBXBuildFile; fileRef = 737800612319368300E33AA0 /* create_db.py */; };
+		737800662319371C00E33AA0 /* WorkoutDBAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800652319371C00E33AA0 /* WorkoutDBAccess.swift */; };
+		7378006823197CB500E33AA0 /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006723197CB500E33AA0 /* Reading.swift */; };
+		7378006A23197CFE00E33AA0 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006923197CFE00E33AA0 /* Day.swift */; };
+		7378006C231988A200E33AA0 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006B231988A200E33AA0 /* Workout.swift */; };
+		73D5438A232671470016AE1E /* OpenAndSaveDialogues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */; };
+		73D5438E23267E3D0016AE1E /* JSONImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D5438D23267E3D0016AE1E /* JSONImporter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +54,14 @@
 		7378004E2319359F00E33AA0 /* WorkoutEditorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutEditorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		737800522319359F00E33AA0 /* WorkoutEditorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditorUITests.swift; sourceTree = "<group>"; };
 		737800542319359F00E33AA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		737800602319368300E33AA0 /* populate_db_from_json.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = populate_db_from_json.py; sourceTree = "<group>"; };
+		737800612319368300E33AA0 /* create_db.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = create_db.py; sourceTree = "<group>"; };
+		737800652319371C00E33AA0 /* WorkoutDBAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDBAccess.swift; sourceTree = "<group>"; };
+		7378006723197CB500E33AA0 /* Reading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reading.swift; sourceTree = "<group>"; };
+		7378006923197CFE00E33AA0 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		7378006B231988A200E33AA0 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
+		73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAndSaveDialogues.swift; sourceTree = "<group>"; };
+		73D5438D23267E3D0016AE1E /* JSONImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONImporter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +92,8 @@
 		737800282319359E00E33AA0 = {
 			isa = PBXGroup;
 			children = (
+				737800612319368300E33AA0 /* create_db.py */,
+				737800602319368300E33AA0 /* populate_db_from_json.py */,
 				737800332319359E00E33AA0 /* WorkoutEditor */,
 				737800462319359F00E33AA0 /* WorkoutEditorTests */,
 				737800512319359F00E33AA0 /* WorkoutEditorUITests */,
@@ -96,12 +114,14 @@
 		737800332319359E00E33AA0 /* WorkoutEditor */ = {
 			isa = PBXGroup;
 			children = (
+				737800642319370700E33AA0 /* DataModel */,
 				737800342319359E00E33AA0 /* AppDelegate.swift */,
 				737800362319359E00E33AA0 /* ViewController.swift */,
 				737800382319359F00E33AA0 /* Assets.xcassets */,
 				7378003A2319359F00E33AA0 /* Main.storyboard */,
 				7378003D2319359F00E33AA0 /* Info.plist */,
 				7378003E2319359F00E33AA0 /* WorkoutEditor.entitlements */,
+				73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */,
 			);
 			path = WorkoutEditor;
 			sourceTree = "<group>";
@@ -122,6 +142,18 @@
 				737800542319359F00E33AA0 /* Info.plist */,
 			);
 			path = WorkoutEditorUITests;
+			sourceTree = "<group>";
+		};
+		737800642319370700E33AA0 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				737800652319371C00E33AA0 /* WorkoutDBAccess.swift */,
+				7378006723197CB500E33AA0 /* Reading.swift */,
+				7378006923197CFE00E33AA0 /* Day.swift */,
+				7378006B231988A200E33AA0 /* Workout.swift */,
+				73D5438D23267E3D0016AE1E /* JSONImporter.swift */,
+			);
+			path = DataModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +224,14 @@
 				TargetAttributes = {
 					737800302319359E00E33AA0 = {
 						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.Mac = {
+								enabled = 1;
+							};
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					737800422319359F00E33AA0 = {
 						CreatedOnToolsVersion = 10.3;
@@ -228,7 +268,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				737800632319368300E33AA0 /* create_db.py in Resources */,
 				737800392319359F00E33AA0 /* Assets.xcassets in Resources */,
+				737800622319368300E33AA0 /* populate_db_from_json.py in Resources */,
 				7378003C2319359F00E33AA0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -255,7 +297,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				737800372319359E00E33AA0 /* ViewController.swift in Sources */,
+				73D5438E23267E3D0016AE1E /* JSONImporter.swift in Sources */,
+				73D5438A232671470016AE1E /* OpenAndSaveDialogues.swift in Sources */,
+				737800662319371C00E33AA0 /* WorkoutDBAccess.swift in Sources */,
 				737800352319359E00E33AA0 /* AppDelegate.swift in Sources */,
+				7378006A23197CFE00E33AA0 /* Day.swift in Sources */,
+				7378006823197CB500E33AA0 /* Reading.swift in Sources */,
+				7378006C231988A200E33AA0 /* Workout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
