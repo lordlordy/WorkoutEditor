@@ -714,7 +714,23 @@
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7hU-dt-hTx">
+                                <rect key="frame" x="2" y="1" width="476" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="jqE-Be-dVC"/>
+                                </constraints>
+                            </progressIndicator>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="7hU-dt-hTx" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="2" id="Fcf-8p-OKh"/>
+                            <constraint firstAttribute="trailing" secondItem="7hU-dt-hTx" secondAttribute="trailing" constant="2" id="ZN6-FD-gPI"/>
+                            <constraint firstAttribute="bottom" secondItem="7hU-dt-hTx" secondAttribute="bottom" constant="2" id="dVB-Or-Nwc"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="progressBar" destination="7hU-dt-hTx" id="qRB-jE-Ebv"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

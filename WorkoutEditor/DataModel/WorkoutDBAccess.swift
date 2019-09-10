@@ -61,13 +61,22 @@ class WorkoutDBAccess{
     public static var shared: WorkoutDBAccess = WorkoutDBAccess()
     
     // default Database
-    public var dbURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")!.appendingPathComponent("Workout.sqlite3")
+    private var dbURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")!.appendingPathComponent("Workout.sqlite3")
 
     private var dayCache: [Date:Day] = [:]
     private var df: DateFormatter = DateFormatter()
+    private var database: OpaquePointer?
     
     func createDatabase(atURL url: URL){
         let _ = createDB(atURL: url)
+    }
+    
+    public func setDBURL(toURL url: URL){
+        dbURL = url
+        database = nil
+    }
+    public func getDBURL() -> URL{
+        return dbURL
     }
     
     func save(day d: Day){
@@ -75,16 +84,15 @@ class WorkoutDBAccess{
         if exists(day: d){
             sqlString = """
                     UPDATE Day
-                    SET type='\(d.type)', comments='\(d.comments)'
+                    SET type='\(d.type)', comments="\(d.comments)"
                     WHERE date='\(df.string(from: d.date))'
                 """
         }else{
             sqlString = """
                     INSERT INTO Day (date, type, comments)
-                    VALUES ('\(df.string(from: d.date))', '\(d.type)', '\(d.comments)')
+                    VALUES ('\(df.string(from: d.date))', '\(d.type)', "\(d.comments)")
             """
         }
-        print(sqlString)
         let _ = execute(sql: sqlString)
 
     }
@@ -130,8 +138,8 @@ class WorkoutDBAccess{
             watts_estimated=\(w.watts_estimated),
             heart_rate=\(w.heart_rate),
             is_brick=\(w.is_brick),
-            keywords='\(w.keywords)',
-            comments='\(w.comments)'
+            keywords="\(w.keywords)",
+            comments="\(w.comments)"
             WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workout_number)
             """
         }else{
@@ -139,7 +147,7 @@ class WorkoutDBAccess{
             INSERT INTO Workout
             (date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments)
             VALUES
-            ('\(df.string(from: w.date))', \(w.workout_number), '\(w.activity)', '\(w.activity_type)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tss_method)', \(w.km), \(w.kj), \(w.ascent_metres), \(w.reps), \(w.is_race), \(w.cadence), \(w.watts), \(w.watts_estimated), \(w.heart_rate), \(w.is_brick), '\(w.keywords)', '\(w.comments)')
+            ('\(df.string(from: w.date))', \(w.workout_number), '\(w.activity)', '\(w.activity_type)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tss_method)', \(w.km), \(w.kj), \(w.ascent_metres), \(w.reps), \(w.is_race), \(w.cadence), \(w.watts), \(w.watts_estimated), \(w.heart_rate), \(w.is_brick), "\(w.keywords)", "\(w.comments)")
             """
         }
         let _ = execute(sql: sqlString)
@@ -242,8 +250,10 @@ class WorkoutDBAccess{
     
     
     private init(){
-        df.dateFormat = "YYYY-MM-dd"
+        df.dateFormat = "yyyy-MM-dd"
+        df.timeZone = Calendar.current.timeZone
     }
+    
     
     private func execute(sql: String) -> Bool{
         if let db = db(){
@@ -309,14 +319,16 @@ class WorkoutDBAccess{
     }
     
     private func db() -> OpaquePointer?{
-        var dbPointer: OpaquePointer? = nil
-        if sqlite3_open(dbURL.path, &dbPointer) == SQLITE_OK{
-            return dbPointer
-        }else{
-            print("Failed to connect to DB \(dbURL). Trying to create...")
-            return createDB(atURL: dbURL)
+        if database == nil{
+            var dbPointer: OpaquePointer? = nil
+            if sqlite3_open(dbURL.path, &dbPointer) == SQLITE_OK{
+                database = dbPointer
+            }else{
+                print("Failed to connect to DB \(dbURL). Trying to create...")
+                return createDB(atURL: dbURL)
+            }
         }
-        
+        return database
     }
     
     private func createDB(atURL url: URL) -> OpaquePointer?{
