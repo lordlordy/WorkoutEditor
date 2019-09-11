@@ -21,6 +21,15 @@
 		7378006C231988A200E33AA0 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006B231988A200E33AA0 /* Workout.swift */; };
 		73D5438A232671470016AE1E /* OpenAndSaveDialogues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */; };
 		73D5438E23267E3D0016AE1E /* JSONImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D5438D23267E3D0016AE1E /* JSONImporter.swift */; };
+		73EC996B2327B96200FE941A /* TrainingDiary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC996A2327B96200FE941A /* TrainingDiary.swift */; };
+		73EC996D2327CC0500FE941A /* PeriodNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC996C2327CC0500FE941A /* PeriodNode.swift */; };
+		73EC996F2327D63F00FE941A /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC996E2327D63F00FE941A /* Date+Extension.swift */; };
+		73EC99742327DEB300FE941A /* YearsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC99732327DEB300FE941A /* YearsViewController.swift */; };
+		73EC99762328109E00FE941A /* NumberToTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC99752328109E00FE941A /* NumberToTimeFormatter.swift */; };
+		73EC9978232904E500FE941A /* Day.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 73EC9977232904E500FE941A /* Day.storyboard */; };
+		73EC997A232906C800FE941A /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC9979232906C800FE941A /* DayViewController.swift */; };
+		73EC997D232948AA00FE941A /* ReadingsArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC997C232948AA00FE941A /* ReadingsArrayController.swift */; };
+		73EC997F2329770C00FE941A /* WorkoutArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC997E2329770C00FE941A /* WorkoutArrayController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +71,15 @@
 		7378006B231988A200E33AA0 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 		73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAndSaveDialogues.swift; sourceTree = "<group>"; };
 		73D5438D23267E3D0016AE1E /* JSONImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONImporter.swift; sourceTree = "<group>"; };
+		73EC996A2327B96200FE941A /* TrainingDiary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingDiary.swift; sourceTree = "<group>"; };
+		73EC996C2327CC0500FE941A /* PeriodNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodNode.swift; sourceTree = "<group>"; };
+		73EC996E2327D63F00FE941A /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		73EC99732327DEB300FE941A /* YearsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearsViewController.swift; sourceTree = "<group>"; };
+		73EC99752328109E00FE941A /* NumberToTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberToTimeFormatter.swift; sourceTree = "<group>"; };
+		73EC9977232904E500FE941A /* Day.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Day.storyboard; sourceTree = "<group>"; };
+		73EC9979232906C800FE941A /* DayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewController.swift; sourceTree = "<group>"; };
+		73EC997C232948AA00FE941A /* ReadingsArrayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingsArrayController.swift; sourceTree = "<group>"; };
+		73EC997E2329770C00FE941A /* WorkoutArrayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutArrayController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +132,8 @@
 		737800332319359E00E33AA0 /* WorkoutEditor */ = {
 			isa = PBXGroup;
 			children = (
+				73EC997B2329488F00FE941A /* ArrayControllers */,
+				73EC99722327DE9000FE941A /* ViewControllers */,
 				737800642319370700E33AA0 /* DataModel */,
 				737800342319359E00E33AA0 /* AppDelegate.swift */,
 				737800362319359E00E33AA0 /* ViewController.swift */,
@@ -122,6 +142,9 @@
 				7378003D2319359F00E33AA0 /* Info.plist */,
 				7378003E2319359F00E33AA0 /* WorkoutEditor.entitlements */,
 				73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */,
+				73EC996E2327D63F00FE941A /* Date+Extension.swift */,
+				73EC99752328109E00FE941A /* NumberToTimeFormatter.swift */,
+				73EC9977232904E500FE941A /* Day.storyboard */,
 			);
 			path = WorkoutEditor;
 			sourceTree = "<group>";
@@ -152,8 +175,28 @@
 				7378006923197CFE00E33AA0 /* Day.swift */,
 				7378006B231988A200E33AA0 /* Workout.swift */,
 				73D5438D23267E3D0016AE1E /* JSONImporter.swift */,
+				73EC996A2327B96200FE941A /* TrainingDiary.swift */,
+				73EC996C2327CC0500FE941A /* PeriodNode.swift */,
 			);
 			path = DataModel;
+			sourceTree = "<group>";
+		};
+		73EC99722327DE9000FE941A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				73EC99732327DEB300FE941A /* YearsViewController.swift */,
+				73EC9979232906C800FE941A /* DayViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		73EC997B2329488F00FE941A /* ArrayControllers */ = {
+			isa = PBXGroup;
+			children = (
+				73EC997C232948AA00FE941A /* ReadingsArrayController.swift */,
+				73EC997E2329770C00FE941A /* WorkoutArrayController.swift */,
+			);
+			path = ArrayControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,6 +313,7 @@
 			files = (
 				737800632319368300E33AA0 /* create_db.py in Resources */,
 				737800392319359F00E33AA0 /* Assets.xcassets in Resources */,
+				73EC9978232904E500FE941A /* Day.storyboard in Resources */,
 				737800622319368300E33AA0 /* populate_db_from_json.py in Resources */,
 				7378003C2319359F00E33AA0 /* Main.storyboard in Resources */,
 			);
@@ -297,12 +341,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				737800372319359E00E33AA0 /* ViewController.swift in Sources */,
+				73EC996F2327D63F00FE941A /* Date+Extension.swift in Sources */,
 				73D5438E23267E3D0016AE1E /* JSONImporter.swift in Sources */,
 				73D5438A232671470016AE1E /* OpenAndSaveDialogues.swift in Sources */,
 				737800662319371C00E33AA0 /* WorkoutDBAccess.swift in Sources */,
+				73EC997F2329770C00FE941A /* WorkoutArrayController.swift in Sources */,
+				73EC997A232906C800FE941A /* DayViewController.swift in Sources */,
 				737800352319359E00E33AA0 /* AppDelegate.swift in Sources */,
 				7378006A23197CFE00E33AA0 /* Day.swift in Sources */,
+				73EC99742327DEB300FE941A /* YearsViewController.swift in Sources */,
+				73EC997D232948AA00FE941A /* ReadingsArrayController.swift in Sources */,
 				7378006823197CB500E33AA0 /* Reading.swift in Sources */,
+				73EC99762328109E00FE941A /* NumberToTimeFormatter.swift in Sources */,
+				73EC996B2327B96200FE941A /* TrainingDiary.swift in Sources */,
+				73EC996D2327CC0500FE941A /* PeriodNode.swift in Sources */,
 				7378006C231988A200E33AA0 /* Workout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,6 +12,10 @@ class ViewController: NSViewController {
 
     @IBOutlet weak var progressBar: NSProgressIndicator!
     
+    var trainingDiary: TrainingDiary{
+        return representedObject as! TrainingDiary
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,8 +25,13 @@ class ViewController: NSViewController {
             WorkoutDBAccess.shared.setDBURL(toURL: url)
         }
         
-        WorkoutDBAccess.shared.rebuildDBCache()
+        representedObject = WorkoutDBAccess.shared.createTrainingDiary()
 
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        ValueTransformer.setValueTransformer(NumberToTimeFormatter(), forName: NSValueTransformerName(rawValue: "NumberToTimeFormatter"))
     }
     
     @IBAction func selectDatabase(_ sender: Any) {
@@ -53,7 +62,7 @@ class ViewController: NSViewController {
             let importer: JSONImporter = JSONImporter(progressUpdater: progressUpdater)
             progressBar.doubleValue = 0.0
             DispatchQueue.global(qos: .userInitiated).async {
-                importer.importDiary(fromURL: url)
+                importer.importDiary(fromURL: url, intoTrainingDiary: self.trainingDiary)
             }
         }
     }
@@ -71,10 +80,9 @@ class ViewController: NSViewController {
         }
     }
     
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        print(segue.sourceController)
+        print(segue.destinationController)
     }
 
     @IBAction func openDocument(_ sender: Any){

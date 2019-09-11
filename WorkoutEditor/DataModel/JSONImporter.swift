@@ -16,7 +16,7 @@ class JSONImporter{
         progressUpdater = updater
     }
     
-    public func importDiary(fromURL url: URL){
+    public func importDiary(fromURL url: URL, intoTrainingDiary td: TrainingDiary){
         let start: Date = Date()
         do{
             let data: Data = try Data.init(contentsOf: url)
@@ -30,7 +30,7 @@ class JSONImporter{
 
             if let days = jsonDict?["days"] as? [[String:Any]]{
                 for d in days{
-                    let day: Day = Day(date: ISO8601DateFormatter().date(from: d["iso8061DateString"] as! String)!, type: d["type"] as! String, comments: d["comments"] as? String ?? "")
+                    let day: Day = Day(date: ISO8601DateFormatter().date(from: d["iso8061DateString"] as! String)!, type: d["type"] as! String, comments: d["comments"] as? String ?? "", trainingDiary: td)
                     if Calendar.current.compare(day.date, to: Calendar.current.date(from: DateComponents(year: 2005, month: 01, day: 02))!, toGranularity: .day) == ComparisonResult.orderedSame{
                         print("found that date")
                     }
@@ -62,7 +62,7 @@ class JSONImporter{
             if let weights = jsonDict?["weights"] as? [[String:Any]]{
                 for w in weights{
                     // just set up dummy day for the save
-                    let day: Day = Day(date: ISO8601DateFormatter().date(from: w["iso8061DateString"] as! String)!, type: "", comments: "")
+                    let day: Day = Day(date: ISO8601DateFormatter().date(from: w["iso8061DateString"] as! String)!, type: "", comments: "", trainingDiary: td)
                     
                     WorkoutDBAccess.shared.save(reading: Reading(type: "kg", value: w["kg"] as! Double, parent: day))
                     WorkoutDBAccess.shared.save(reading: Reading(type: "fatPercentage", value: w["fatPercent"] as! Double, parent: day))
@@ -76,7 +76,7 @@ class JSONImporter{
             if let physiologicals = jsonDict?["physiologicals"] as? [[String:Any]]{
                 for physio in physiologicals{
                     // just set up dummy day for the save
-                    let day: Day = Day(date: ISO8601DateFormatter().date(from: physio["iso8061DateString"] as! String)!, type: "", comments: "")
+                    let day: Day = Day(date: ISO8601DateFormatter().date(from: physio["iso8061DateString"] as! String)!, type: "", comments: "", trainingDiary: td)
                     
                     WorkoutDBAccess.shared.save(reading: Reading(type: "restingHR", value: physio["restingHR"] as! Double, parent: day))
                     if let rmssd = physio["restingRMSSD"] as? Double{
@@ -97,15 +97,21 @@ class JSONImporter{
             print("error initialising Training Diary for URL: " + url.absoluteString)
         }
         
-        print("import took \(Int(Date().timeIntervalSince(start)))ms")
+        print("import took \(Int(Date().timeIntervalSince(start)))s")
     }
     
     private func workout(fromDict dict: [String: Any], andDay day: Day, workout_number: Int) -> Workout{
+        var equip: String = ""
+        if let e = dict["equipmentName"] as? String{
+            if e != "Not Set"{
+                equip = e
+            }
+        }
         return Workout(day: day,
                        workout_number: workout_number,
                        activity: dict["activityString"] as! String,
                        activity_type: dict["activityTypeString"] as! String,
-                       equipment: dict["equipmentName"] as! String,
+                       equipment: equip,
                        seconds: dict["seconds"] as! Int,
                        rpe: dict["rpe"] as! Double,
                        tss: dict["tss"] as! Double,

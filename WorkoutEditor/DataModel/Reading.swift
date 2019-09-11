@@ -8,13 +8,14 @@
 
 import Foundation
 
-class Reading{
+class Reading: NSObject{
     
-    var date: Date{ return day.date }
-    var type: String
-    var value: Double
-    var day: Day
-    var description: String{ return "\(type):\(value)"}
+    @objc var date: Date{ return day.date }
+    @objc var type: String
+    @objc var value: Double
+    @objc var day: Day
+    override var description: String{ return "\(type):\(value)"}
+    
     
     init(type: String, value: Double, parent: Day){
         self.type = type

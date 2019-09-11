@@ -63,7 +63,7 @@ class WorkoutDBAccess{
     // default Database
     private var dbURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")!.appendingPathComponent("Workout.sqlite3")
 
-    private var dayCache: [Date:Day] = [:]
+//    private var dayCache: [Date:Day] = [:]
     private var df: DateFormatter = DateFormatter()
     private var database: OpaquePointer?
     
@@ -78,6 +78,65 @@ class WorkoutDBAccess{
     public func getDBURL() -> URL{
         return dbURL
     }
+    
+    func dayTypes() -> [String]{
+        var types: [String] = []
+        if let db = db(){
+            var query: OpaquePointer? = nil
+            if sqlite3_prepare_v2(db, "SELECT DISTINCT(type) FROM Day", -1, &query, nil) != SQLITE_OK{
+                print("unable to prepare query")
+                print("error: \(String(cString: sqlite3_errmsg(db)))")
+            }
+            //have a query
+            while(sqlite3_step(query)) == SQLITE_ROW{
+                types.append(String(cString: sqlite3_column_text(query, 0)))
+            }
+        }
+        return types
+    }
+    
+    func activities() -> [String]{ return workoutTypes(forColumn: "activity") }
+    func activityTypes() -> [String]{ return workoutTypes(forColumn: "activity_type") }
+    func equipmentTypes() -> [String]{ return workoutTypes(forColumn: "equipment") }
+    func tssMethods() -> [String]{ return workoutTypes(forColumn: "tss_method") }
+
+    private func workoutTypes(forColumn col: String) -> [String]{
+        var types: [String] = []
+        if let db = db(){
+            var query: OpaquePointer? = nil
+            if sqlite3_prepare_v2(db, "SELECT DISTINCT(\(col)) FROM Workout", -1, &query, nil) != SQLITE_OK{
+                print("unable to prepare query")
+                print("error: \(String(cString: sqlite3_errmsg(db)))")
+            }
+            //have a query
+            while(sqlite3_step(query)) == SQLITE_ROW{
+                let str: String = String(cString: sqlite3_column_text(query, 0))
+                if str != ""{
+                    types.append(str)
+                }
+            }
+        }
+
+        return types
+    }
+    
+    func readingTypes() -> Set<String>{
+        var types:  Set<String> = Set<String>()
+        if let db = db(){
+            var query: OpaquePointer? = nil
+            if sqlite3_prepare_v2(db, "SELECT DISTINCT(type) FROM Reading", -1, &query, nil) != SQLITE_OK{
+                print("unable to prepare query")
+                print("error: \(String(cString: sqlite3_errmsg(db)))")
+            }
+            //have a query
+            while(sqlite3_step(query)) == SQLITE_ROW{
+                types.insert(String(cString: sqlite3_column_text(query, 0)))
+            }
+        }
+        return types
+    }
+    
+    
     
     func save(day d: Day){
         var sqlString: String = ""
@@ -94,6 +153,14 @@ class WorkoutDBAccess{
             """
         }
         let _ = execute(sql: sqlString)
+        
+        for r in d.readings{
+            save(reading: r)
+        }
+        
+        for w in d.workouts{
+            save(workout: w)
+        }
 
     }
     
@@ -122,55 +189,60 @@ class WorkoutDBAccess{
             UPDATE Workout
             SET
             activity='\(w.activity)',
-            activity_type='\(w.activity_type)',
+            activity_type='\(w.activityType)',
             equipment='\(w.equipment)',
             seconds=\(w.seconds),
             rpe=\(w.rpe),
             tss=\(w.tss),
-            tss_method='\(w.tss_method)',
+            tss_method='\(w.tssMethod)',
             km=\(w.km),
             kj=\(w.kj),
-            ascent_metres=\(w.ascent_metres),
+            ascent_metres=\(w.ascentMetres),
             reps=\(w.reps),
-            is_race=\(w.is_race),
+            is_race=\(w.isRace),
             cadence=\(w.cadence),
             watts=\(w.watts),
-            watts_estimated=\(w.watts_estimated),
-            heart_rate=\(w.heart_rate),
-            is_brick=\(w.is_brick),
+            watts_estimated=\(w.wattsEstimated),
+            heart_rate=\(w.heartRate),
+            is_brick=\(w.isBrick),
             keywords="\(w.keywords)",
             comments="\(w.comments)"
-            WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workout_number)
+            WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)
             """
         }else{
             sqlString = """
             INSERT INTO Workout
             (date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments)
             VALUES
-            ('\(df.string(from: w.date))', \(w.workout_number), '\(w.activity)', '\(w.activity_type)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tss_method)', \(w.km), \(w.kj), \(w.ascent_metres), \(w.reps), \(w.is_race), \(w.cadence), \(w.watts), \(w.watts_estimated), \(w.heart_rate), \(w.is_brick), "\(w.keywords)", "\(w.comments)")
+            ('\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)")
             """
         }
         let _ = execute(sql: sqlString)
 
     }
     
-    func rebuildDBCache(){
-        dayCache = [:]
+    func createTrainingDiary() -> TrainingDiary{
+        let td: TrainingDiary = TrainingDiary()
+//        var dayCache: [Date: Day] = [:]
         let start = Date()
         if let db = db(){
             var query: OpaquePointer? = nil
             if sqlite3_prepare_v2(db, "SELECT date, type FROM Day", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
-                return
             }
             //have a query
             while(sqlite3_step(query)) == SQLITE_ROW{
                 let dString: String  = String(cString: sqlite3_column_text(query, 0))
                 let date: Date = df.date(from: dString)!
                 let type: String  = String(cString: sqlite3_column_text(query, 1))
-                let d: Day = Day(date: date, type: type, comments: "")
-                dayCache[date] = d
+                
+                let dc: DateComponents = Calendar.current.dateComponents([.year, .month, .day], from: date)
+                
+                let d: Day = Day(date: Calendar.current.date(from: DateComponents(year: dc.year!, month: dc.month!, day: dc.day!, hour: 12, minute: 00, second: 00))!, type: type, comments: "", trainingDiary: td)
+                if !td.add(day: d){
+                    print("Unable to add \(d) as day on that date already exists")
+                }
             }
             sqlite3_finalize(query)
             query = nil
@@ -178,7 +250,6 @@ class WorkoutDBAccess{
             if sqlite3_prepare_v2(db, "SELECT date, type, value FROM Reading", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
-                return
             }
             while(sqlite3_step(query)) == SQLITE_ROW{
                 let dString: String  = String(cString: sqlite3_column_text(query, 0))
@@ -186,7 +257,7 @@ class WorkoutDBAccess{
                 let type: String  = String(cString: sqlite3_column_text(query, 1))
                 let value: Double  = sqlite3_column_double(query, 2)
 
-                if let d = dayCache[date]{
+                if let d = td.day(forDate: date){
                     d.add(readings: [Reading(type: type, value: value, parent: d)])
                 }
             }
@@ -200,7 +271,6 @@ class WorkoutDBAccess{
             if sqlite3_prepare_v2(db, wQuery, -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
-                return
             }
             while(sqlite3_step(query)) == SQLITE_ROW{
                 let dString: String  = String(cString: sqlite3_column_text(query, 0))
@@ -226,7 +296,7 @@ class WorkoutDBAccess{
 //                let keywords
 //                let comments
                 
-                if let d = dayCache[date]{
+                if let d = td.day(forDate: date){
                     d.add(workout: Workout(day: d, workout_number: workout_number, activity: activity, activity_type: activity_type, equipment: equipment, seconds: seconds, rpe: rpe, tss: tss, tss_method: tss_method, km: km, kj: kj, ascent_metres: ascent_metres, reps: reps, is_race: is_race, cadence: cadence, watts: watts, watts_estimated: watts_estimated, heart_rate: heart_rate, is_brick: is_brick, keywords: "", comments: ""))
                 }
             }
@@ -236,16 +306,8 @@ class WorkoutDBAccess{
             print("no valid DB connected to")
         }
 
-        // lets do a test and sum up bike KM
-        let swimKM: Double = dayCache.values.reduce(0.0, {$0 + $1.swimKM})
-        let bikeKM: Double = dayCache.values.reduce(0.0, {$0 + $1.bikeKM})
-        let runKM: Double = dayCache.values.reduce(0.0, {$0 + $1.runKM})
-        print("swim = \(swimKM)")
-        print("bike = \(bikeKM)")
-        print("run = \(runKM)")
-
-        print("Cache built in \(Date().timeIntervalSince(start))ms")
-        
+        print("Cache built in \(Date().timeIntervalSince(start))s")
+        return td
     }
     
     
@@ -306,7 +368,7 @@ class WorkoutDBAccess{
     
     private func exists(workout w: Workout) -> Bool{
         if let db = db(){
-            let qString: String = "SELECT date, workout_number FROM Workout WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workout_number)"
+            let qString: String = "SELECT date, workout_number FROM Workout WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)"
             var query: OpaquePointer? = nil
             if sqlite3_prepare_v2(db, qString, -1, &query, nil) == SQLITE_OK{
                 let success = sqlite3_step(query) == SQLITE_ROW
