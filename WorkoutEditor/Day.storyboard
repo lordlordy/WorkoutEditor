@@ -1134,6 +1134,9 @@
                                                                 <size key="minSize" width="489" height="197"/>
                                                                 <size key="maxSize" width="489" height="10000000"/>
                                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                <connections>
+                                                                    <binding destination="cg7-yQ-Ree" name="value" keyPath="representedObject.comments" id="Q4q-cw-zhP"/>
+                                                                </connections>
                                                             </textView>
                                                         </subviews>
                                                     </clipView>
@@ -1214,6 +1217,18 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dhy-Jh-6ZZ">
+                                <rect key="frame" x="653" y="406" width="274" height="22"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="kPP-aQ-ajf">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="cg7-yQ-Ree" name="value" keyPath="representedObject.comments" id="sdG-3F-HnH"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="8KW-Yb-UhB" firstAttribute="leading" secondItem="n54-9X-fE0" secondAttribute="trailing" constant="2" id="0I0-in-S1h"/>

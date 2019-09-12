@@ -23,8 +23,8 @@ class DayViewController: NSViewController {
     }
     
     @IBAction func test(_ sender: Any) {
-        for t in WorkoutDBAccess.shared.dayTypes(){
-            print(t)
+        if let d = representedObject as? Day{
+            print(d.comments)
         }
     }
     

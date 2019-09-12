@@ -11,6 +11,7 @@ import Cocoa
 class ViewController: NSViewController {
 
     @IBOutlet weak var progressBar: NSProgressIndicator!
+    private var mainWindowName: String = ""
     
     var trainingDiary: TrainingDiary{
         return representedObject as! TrainingDiary
@@ -37,6 +38,7 @@ class ViewController: NSViewController {
     @IBAction func selectDatabase(_ sender: Any) {
         if let url = OpenAndSaveDialogues().selectedPath(withTitle: "select database",andFileTypes: ["sqlite3"], directory: FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")) {
             setDB(toURL: url)
+            dbSwitch()
         }
     }
     
@@ -45,16 +47,20 @@ class ViewController: NSViewController {
         UserDefaults.standard.set(url, forKey: "DatabaseName")
         if let w = view.window{
             w.title = url.lastPathComponent
+            mainWindowName = w.title
         }
     }
     
 
     
     @IBAction func newDB(_ sender: Any){
+        // let user select new DB
         if let url = OpenAndSaveDialogues().saveFilePath(suggestedFileName: "NewDB", allowFileTypes: ["sqlite3"], directory: FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")){
             WorkoutDBAccess.shared.createDatabase(atURL: url )
             setDB(toURL: url)
+            dbSwitch()
         }
+        
     }
     
     @IBAction func importJSON(_ sender: Any){
@@ -85,8 +91,34 @@ class ViewController: NSViewController {
         print(segue.destinationController)
     }
 
-    @IBAction func openDocument(_ sender: Any){
-        print("open document")
+    
+    private func dbSwitch(){
+        // need to ditch all open editing windows as they reference a different DB. Then need to reload main window
+        let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
+        let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
+        let infoList = windowsListInfo as! [[String:Any]]
+        let visibleWindows = infoList.filter{ $0["kCGWindowOwnerName"] as! String == "WorkoutEditor" }
+        
+        for v in visibleWindows{
+            if v["kCGWindowName"] as! String != mainWindowName{
+                // need to close this
+                if let window = NSApp.window(withWindowNumber: v["kCGWindowNumber"] as! Int){
+                    window.close()
+                }
+            }
+        }
+        
+        representedObject = WorkoutDBAccess.shared.createTrainingDiary()
+        
+        for child in children{
+            for c in child.children{
+                if let yvc = c as? YearsViewController{
+                    yvc.reloadOutlineView()
+//                    yvc.representedObject = representedObject
+                }
+            }
+        }
+        
     }
 
 }

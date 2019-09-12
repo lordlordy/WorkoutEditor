@@ -44,11 +44,20 @@ class YearsViewController: NSViewController {
         months = !months
         if let td = trainingDiary{
             td.monthly = months
-            nodes = [td]
-            outlineView.reloadData()
+            reloadOutlineView()
         }
     }
     
+    func reloadOutlineView(){
+        if let td = trainingDiary{
+            nodes = [td]
+            outlineView.reloadData()
+            outlineView.expandItem(outlineView.item(atRow: 0))
+            outlineView.expandItem(outlineView.item(atRow: 1))
+            outlineView.expandItem(outlineView.item(atRow: 2))
+        }
+    }
+        
     @IBAction func newDay(_ sender: NSButton) {
         if let td = trainingDiary{
             let day: Day = td.defaultNewDay()

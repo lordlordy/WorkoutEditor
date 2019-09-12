@@ -63,7 +63,6 @@ class WorkoutDBAccess{
     // default Database
     private var dbURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")!.appendingPathComponent("Workout.sqlite3")
 
-//    private var dayCache: [Date:Day] = [:]
     private var df: DateFormatter = DateFormatter()
     private var database: OpaquePointer?
     
@@ -146,6 +145,7 @@ class WorkoutDBAccess{
                     SET type='\(d.type)', comments="\(d.comments)"
                     WHERE date='\(df.string(from: d.date))'
                 """
+            print(sqlString)
         }else{
             sqlString = """
                     INSERT INTO Day (date, type, comments)
@@ -223,11 +223,10 @@ class WorkoutDBAccess{
     
     func createTrainingDiary() -> TrainingDiary{
         let td: TrainingDiary = TrainingDiary()
-//        var dayCache: [Date: Day] = [:]
         let start = Date()
         if let db = db(){
             var query: OpaquePointer? = nil
-            if sqlite3_prepare_v2(db, "SELECT date, type FROM Day", -1, &query, nil) != SQLITE_OK{
+            if sqlite3_prepare_v2(db, "SELECT date, type, comments FROM Day", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
             }
@@ -236,10 +235,11 @@ class WorkoutDBAccess{
                 let dString: String  = String(cString: sqlite3_column_text(query, 0))
                 let date: Date = df.date(from: dString)!
                 let type: String  = String(cString: sqlite3_column_text(query, 1))
-                
+                let comments: String  = String(cString: sqlite3_column_text(query, 2))
+
                 let dc: DateComponents = Calendar.current.dateComponents([.year, .month, .day], from: date)
                 
-                let d: Day = Day(date: Calendar.current.date(from: DateComponents(year: dc.year!, month: dc.month!, day: dc.day!, hour: 12, minute: 00, second: 00))!, type: type, comments: "", trainingDiary: td)
+                let d: Day = Day(date: Calendar.current.date(from: DateComponents(year: dc.year!, month: dc.month!, day: dc.day!, hour: 12, minute: 00, second: 00))!, type: type, comments: comments, trainingDiary: td)
                 if !td.add(day: d){
                     print("Unable to add \(d) as day on that date already exists")
                 }
@@ -293,11 +293,12 @@ class WorkoutDBAccess{
                 let watts_estimated: Bool = Int(sqlite3_column_int(query, 16)) > 0
                 let heart_rate: Int = Int(sqlite3_column_int(query, 17))
                 let is_brick: Bool = Int(sqlite3_column_int(query, 18)) > 0
-//                let keywords
-//                let comments
+                let keywords: String = String(cString: sqlite3_column_text(query, 19))
+                let comments: String = String(cString: sqlite3_column_text(query, 20))
+
                 
                 if let d = td.day(forDate: date){
-                    d.add(workout: Workout(day: d, workout_number: workout_number, activity: activity, activity_type: activity_type, equipment: equipment, seconds: seconds, rpe: rpe, tss: tss, tss_method: tss_method, km: km, kj: kj, ascent_metres: ascent_metres, reps: reps, is_race: is_race, cadence: cadence, watts: watts, watts_estimated: watts_estimated, heart_rate: heart_rate, is_brick: is_brick, keywords: "", comments: ""))
+                    d.add(workout: Workout(day: d, workout_number: workout_number, activity: activity, activity_type: activity_type, equipment: equipment, seconds: seconds, rpe: rpe, tss: tss, tss_method: tss_method, km: km, kj: kj, ascent_metres: ascent_metres, reps: reps, is_race: is_race, cadence: cadence, watts: watts, watts_estimated: watts_estimated, heart_rate: heart_rate, is_brick: is_brick, keywords: keywords, comments: comments))
                 }
             }
             sqlite3_finalize(query)

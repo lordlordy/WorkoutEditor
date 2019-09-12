@@ -11,7 +11,7 @@ import Foundation
 class Day: NSObject{
     @objc var date: Date
     @objc var type: String
-    @objc var comments: String
+    @objc dynamic var comments: String
     @objc dynamic var readings: [Reading] = []
     @objc dynamic var workouts: [Workout] = []
     var unusedReadingStrings: [String]{

@@ -58,10 +58,8 @@ class TrainingDiary: NSObject{
     
     // TO DO - change this to throws and handle not saving
     func save(day d: Day){
-        if add(day: d){
-            WorkoutDBAccess.shared.save(day: d)
-        }
-        
+        WorkoutDBAccess.shared.save(day: d)
+    
     }
     
     func setReload(){
@@ -122,8 +120,8 @@ extension TrainingDiary: PeriodNode{
     var bikeTSS: Double { return children.reduce(0.0, {$0 + $1.bikeTSS}) }
     var runSeconds: TimeInterval { return children.reduce(0.0, {$0 + $1.runSeconds}) }
     var runTSS: Double { return children.reduce(0.0, {$0 + $1.runTSS}) }
-    var fromDate: Date { return dayCache.values.map({$0.date}).min()! }
-    var toDate: Date { return dayCache.values.map({$0.date}).max()! }
+    var fromDate: Date { return dayCache.values.map({$0.date}).min() ?? Date() }
+    var toDate: Date { return dayCache.values.map({$0.date}).max() ?? Date() }
     var isLeaf: Bool { return false}
     var leafCount: Int { return children.reduce(0, {$0 + $1.leafCount}) }
     var type: String { return "Diary" }
