@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TrainingDiary: NSObject{
+@objc class TrainingDiary: NSObject{
     
     @objc var swimKM: Double{
         return dayCache.values.reduce(0.0, {$0 + $1.swimKM})
@@ -30,7 +30,13 @@ class TrainingDiary: NSObject{
     @objc var activityTypes: [String] { return WorkoutDBAccess.shared.activityTypes()}
     @objc var equipmentTypes: [String] { return WorkoutDBAccess.shared.equipmentTypes()}
     @objc var tssMethods: [String] { return WorkoutDBAccess.shared.tssMethods()}
+    @objc var raceTypes: [String] { return WorkoutDBAccess.shared.raceTypes()}
+    @objc var raceBrands: [String] { return WorkoutDBAccess.shared.raceBrands()}
+    @objc var raceDistances: [String] { return WorkoutDBAccess.shared.raceDistances()}
+    @objc var ageCategories: [String] { return WorkoutDBAccess.shared.ageCategories()}
 
+    @objc var raceResults: [RaceResult] = []
+    
     private var dayCache: [String:Day] = [:]
     private var monthlyNodes: [PeriodNode]?
     private var weeklyNodes: [PeriodNode]?
@@ -101,6 +107,12 @@ class TrainingDiary: NSObject{
         return weeklyNodes!
     }
     
+    func defaultNewRaceResult() -> RaceResult{
+        let rr: RaceResult = RaceResult()
+        rr.raceNumber = raceResults(from: Date(), to: Date()).count + 1
+        return rr
+    }
+    
     func defaultNewDay() -> Day{
         let days: [Day] = descendingOrderedDays()
         var newDate: Date = Date()
@@ -115,6 +127,10 @@ class TrainingDiary: NSObject{
             Reading(type: "fatigue", value: 5.0, parent: day)])
         add(day: day)
         return day
+    }
+ 
+    func raceResults(from: Date, to: Date) -> [RaceResult]{
+        return raceResults.filter({$0.date >= from.startOfDay && $0.date <= to.endOfDay})
     }
     
 }
@@ -187,6 +203,7 @@ extension TrainingDiary: PeriodNode{
         }
         return result
     }
+
     
 }
 

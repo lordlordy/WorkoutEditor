@@ -6,6 +6,12 @@
 //  Copyright © 2019 Steven Lord. All rights reserved.
 //
 
+// TO DO
+// 1. Deleting of race results - need to remove from DB ---- DONE
+// 2. Deleting of workouts - need to remove from DB ---- DONE
+// 3. Report error when don't save - eg if input race with same date and raceNumber - this is a unique key so won't save
+// 4. When change DB update RaceResults array
+
 import Cocoa
 
 class ViewController: NSViewController {

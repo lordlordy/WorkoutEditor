@@ -21,6 +21,13 @@ class WorkoutArrayController: NSArrayController {
         }
     }
     
-
+    override func remove(_ sender: Any?) {
+        if let workouts = selectedObjects as? [Workout]{
+            if workouts.count > 0{
+                WorkoutDBAccess.shared.delete(workout: workouts[0])
+            }
+        }
+        super.remove(sender)
+    }
         
 }

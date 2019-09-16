@@ -13,6 +13,9 @@
 		73145DF4232BDF6A009DBADF /* Maths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF3232BDF6A009DBADF /* Maths.swift */; };
 		73145DF6232F86C2009DBADF /* JSONProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF5232F86C2009DBADF /* JSONProperties.swift */; };
 		73145DF8232F87D2009DBADF /* JSONExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF7232F87D2009DBADF /* JSONExporter.swift */; };
+		73145DFA232FA101009DBADF /* RaceResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF9232FA101009DBADF /* RaceResult.swift */; };
+		73145DFF232FA55C009DBADF /* RaceResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DFD232FA55C009DBADF /* RaceResultsViewController.swift */; };
+		73145E02232FE709009DBADF /* RaceResultsArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145E01232FE709009DBADF /* RaceResultsArrayController.swift */; };
 		733A6E49232A639C001087E9 /* DataWarehouseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E48232A639C001087E9 /* DataWarehouseGenerator.swift */; };
 		733A6E4B232A6CBD001087E9 /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4A232A6CBD001087E9 /* WorkoutType.swift */; };
 		733A6E4D232A8F33001087E9 /* WarehouseColumns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */; };
@@ -66,6 +69,9 @@
 		73145DF3232BDF6A009DBADF /* Maths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maths.swift; sourceTree = "<group>"; };
 		73145DF5232F86C2009DBADF /* JSONProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONProperties.swift; sourceTree = "<group>"; };
 		73145DF7232F87D2009DBADF /* JSONExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONExporter.swift; sourceTree = "<group>"; };
+		73145DF9232FA101009DBADF /* RaceResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaceResult.swift; sourceTree = "<group>"; };
+		73145DFD232FA55C009DBADF /* RaceResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaceResultsViewController.swift; sourceTree = "<group>"; };
+		73145E01232FE709009DBADF /* RaceResultsArrayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaceResultsArrayController.swift; sourceTree = "<group>"; };
 		733A6E48232A639C001087E9 /* DataWarehouseGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataWarehouseGenerator.swift; sourceTree = "<group>"; };
 		733A6E4A232A6CBD001087E9 /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
 		733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarehouseColumns.swift; sourceTree = "<group>"; };
@@ -207,6 +213,7 @@
 				733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */,
 				73145DF5232F86C2009DBADF /* JSONProperties.swift */,
 				73145DF7232F87D2009DBADF /* JSONExporter.swift */,
+				73145DF9232FA101009DBADF /* RaceResult.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -216,6 +223,7 @@
 			children = (
 				73EC99732327DEB300FE941A /* YearsViewController.swift */,
 				73EC9979232906C800FE941A /* DayViewController.swift */,
+				73145DFD232FA55C009DBADF /* RaceResultsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -225,6 +233,7 @@
 			children = (
 				73EC997C232948AA00FE941A /* ReadingsArrayController.swift */,
 				73EC997E2329770C00FE941A /* WorkoutArrayController.swift */,
+				73145E01232FE709009DBADF /* RaceResultsArrayController.swift */,
 			);
 			path = ArrayControllers;
 			sourceTree = "<group>";
@@ -386,8 +395,10 @@
 				737800352319359E00E33AA0 /* AppDelegate.swift in Sources */,
 				73145DF8232F87D2009DBADF /* JSONExporter.swift in Sources */,
 				7378006A23197CFE00E33AA0 /* Day.swift in Sources */,
+				73145E02232FE709009DBADF /* RaceResultsArrayController.swift in Sources */,
 				73EC99742327DEB300FE941A /* YearsViewController.swift in Sources */,
 				73EC997D232948AA00FE941A /* ReadingsArrayController.swift in Sources */,
+				73145DFA232FA101009DBADF /* RaceResult.swift in Sources */,
 				73145DF2232BDEEB009DBADF /* RollingSumQueue.swift in Sources */,
 				7378006823197CB500E33AA0 /* Reading.swift in Sources */,
 				73EC99762328109E00FE941A /* NumberToTimeFormatter.swift in Sources */,
@@ -395,6 +406,7 @@
 				73EC996B2327B96200FE941A /* TrainingDiary.swift in Sources */,
 				73EC996D2327CC0500FE941A /* PeriodNode.swift in Sources */,
 				7378006C231988A200E33AA0 /* Workout.swift in Sources */,
+				73145DFF232FA55C009DBADF /* RaceResultsViewController.swift in Sources */,
 				733A6E49232A639C001087E9 /* DataWarehouseGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

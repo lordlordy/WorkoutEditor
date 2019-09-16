@@ -43,8 +43,10 @@ import Foundation
     @objc var isBrick: Bool
     @objc var keywords: String
     @objc dynamic var comments: String
+    @objc var lastSave: Date? = nil
     
     @objc dynamic var rpeTSS: Int = 0
+
     
     var unsavedChanges: Bool = false
     

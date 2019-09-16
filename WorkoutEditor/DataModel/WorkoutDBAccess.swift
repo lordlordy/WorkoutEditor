@@ -53,9 +53,36 @@ class WorkoutDBAccess{
                 is_brick BOOLEAN NOT NULL,
                 keywords TEXT NOT NULL,
                 comments TEXT NOT NULL,
+                last_save Date,
                 PRIMARY KEY (date, workout_number),
                 FOREIGN KEY (date) REFERENCES Day(date)
             );
+    """
+    
+    private let createRaceResultTableSQL: String = """
+        CREATE TABLE RaceResult(
+            date Date NOT NULL,
+            race_number INTEGER NOT NULL,
+            type varchar(16) NOT NULL,
+            brand varchar(16) NOT NULL,
+            distance varchar(16) NOT NULL,
+            name varchar(64) NOT NULL,
+            category varchar(16) NOT NULL,
+            overall_position INTEGER NOT NULL,
+            category_position INTEGER NOT NULL,
+            swim_seconds INTEGER NOT NULL,
+            t1_seconds INTEGER NOT NULL,
+            bike_seconds INTEGER NOT NULL,
+            t2_seconds INTEGER NOT NULL,
+            run_seconds INTEGER NOT NULL,
+            swim_km REAL NOT NULL,
+            bike_km REAL NOT NULL,
+            run_km REAL NOT NULL,
+            comments TEXT NOT NULL,
+            race_report TEXT NOT NULL,
+            last_save Date,
+            PRIMARY KEY (date, race_number)
+        );
     """
     
     public static var shared: WorkoutDBAccess = WorkoutDBAccess()
@@ -97,16 +124,20 @@ class WorkoutDBAccess{
         return types
     }
     
-    func activities() -> [String]{ return workoutTypes(forColumn: "activity") }
-    func activityTypes() -> [String]{ return workoutTypes(forColumn: "activity_type") }
-    func equipmentTypes() -> [String]{ return workoutTypes(forColumn: "equipment") }
-    func tssMethods() -> [String]{ return workoutTypes(forColumn: "tss_method") }
+    func activities() -> [String]{ return types(forTable: "Workout", andColumn: "activity") }
+    func activityTypes() -> [String]{ return types(forTable: "Workout", andColumn: "activity_type") }
+    func equipmentTypes() -> [String]{ return types(forTable: "Workout", andColumn: "equipment") }
+    func tssMethods() -> [String]{ return types(forTable: "Workout", andColumn: "tss_method") }
+    func raceTypes() -> [String]{ return types(forTable: "RaceResult", andColumn: "type") }
+    func raceBrands() -> [String]{ return types(forTable: "RaceResult", andColumn: "brand") }
+    func raceDistances() -> [String]{ return types(forTable: "RaceResult", andColumn: "distance") }
+    func ageCategories() -> [String]{ return types(forTable: "RaceResult", andColumn: "category") }
 
-    private func workoutTypes(forColumn col: String) -> [String]{
+    private func types(forTable table: String, andColumn col: String) -> [String]{
         var types: [String] = []
         if let db = db(){
             var query: OpaquePointer? = nil
-            if sqlite3_prepare_v2(db, "SELECT DISTINCT(\(col)) FROM Workout", -1, &query, nil) != SQLITE_OK{
+            if sqlite3_prepare_v2(db, "SELECT DISTINCT(\(col)) FROM \(table)", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
             }
@@ -137,7 +168,6 @@ class WorkoutDBAccess{
         }
         return types
     }
-    
     
     
     func save(day d: Day){
@@ -186,6 +216,23 @@ class WorkoutDBAccess{
 
     }
     
+    func delete(workout w: Workout){
+        guard let lastSave = w.lastSave else{
+            // can't remove if it's never been saved.
+            return
+        }
+        
+        let deleteSQL: String = """
+            DELETE FROM Workout
+            WHERE date="\(w.day.iso8601DateString)" AND workout_number=\(w.workoutNumber) AND last_save="\(ISO8601DateFormatter().string(from: lastSave))"
+        """
+        if execute(sql: deleteSQL){
+            print("DELETED \(w.description)")
+        }else{
+            print("Unable to delete \(w.description)")
+        }
+    }
+    
     func save(workout w: Workout){
         var sqlString: String = ""
         if exists(workout: w){
@@ -211,18 +258,74 @@ class WorkoutDBAccess{
             is_brick=\(w.isBrick),
             keywords="\(w.keywords)",
             comments="\(w.comments)"
+            last_save="\(ISO8601DateFormatter().string(from: Date()))"
             WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)
             """
         }else{
             sqlString = """
             INSERT INTO Workout
-            (date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments)
+            (date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save)
             VALUES
-            ('\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)")
+            ('\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)", "\(ISO8601DateFormatter().string(from: Date()))")
             """
         }
         let _ = execute(sql: sqlString)
 
+    }
+    
+    func delete(raceResult rr: RaceResult){
+        guard let lastSave = rr.lastSave else{
+            // can't remove if it's never been saved.
+            return
+        }
+        
+        let deleteSQL: String = """
+        DELETE FROM RaceResult
+        WHERE date="\(rr.iso8601DateString)" AND race_number=\(rr.raceNumber) AND last_save="\(ISO8601DateFormatter().string(from: lastSave))"
+        """
+        if execute(sql: deleteSQL){
+            print("DELETED \(rr.description)")
+        }else{
+            print("Unable to delete \(rr.description)")
+        }
+    }
+    
+    func save(raceResult r: RaceResult){
+        var sqlString: String = ""
+        if exists(raceResult: r){
+            sqlString = """
+            UPDATE RaceResult
+            SET
+            type="\(r.type)",
+            brand="\(r.brand)",
+            distance="\(r.distance)",
+            name="\(r.name)",
+            category="\(r.category)",
+            overall_position=\(r.overallPosition),
+            category_position=\(r.categoryPosition),
+            swim_seconds=\(r.swimSeconds),
+            t1_seconds=\(r.t1Seconds),
+            bike_seconds=\(r.bikeSeconds),
+            t2_seconds=\(r.t2Seconds),
+            run_seconds=\(r.runSeconds),
+            swim_km=\(r.swimKM),
+            bike_km=\(r.bikeKM),
+            run_km=\(r.runKM),
+            comments="\(r.comments)",
+            race_report="\(r.raceReport)"
+            last_save="\(ISO8601DateFormatter().string(from: Date()))"
+            WHERE date='\(df.string(from: r.date))' and race_number=\(r.raceNumber)
+            """
+        }else{
+            sqlString = """
+            INSERT INTO RaceResult
+            (date, race_number, type, brand, distance, name, category, overall_position, category_position, swim_seconds, t1_seconds, bike_seconds, t2_seconds, run_seconds, swim_km, bike_km, run_km, comments, race_report, last_save)
+            VALUES
+            ("\(r.iso8601DateString)", \(r.raceNumber), "\(r.type)", "\(r.brand)", "\(r.distance)", "\(r.name)", "\(r.category)", \(r.overallPosition), \(r.categoryPosition), \(r.swimSeconds), \(r.t1Seconds), \(r.bikeSeconds), \(r.t2Seconds), \(r.runSeconds), \(r.swimKM), \(r.bikeKM), \(r.runKM), "\(r.comments)", "\(r.raceReport)", "\(ISO8601DateFormatter().string(from: Date()))")
+            """
+        }
+        let _ = execute(sql: sqlString)
+        
     }
     
     func createTrainingDiary() -> TrainingDiary{
@@ -269,7 +372,7 @@ class WorkoutDBAccess{
             query = nil
 
             let wQuery: String = """
-                SELECT date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments
+                SELECT date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save
                 FROM Workout
             """
             if sqlite3_prepare_v2(db, wQuery, -1, &query, nil) != SQLITE_OK{
@@ -299,19 +402,68 @@ class WorkoutDBAccess{
                 let is_brick: Bool = Int(sqlite3_column_int(query, 18)) > 0
                 let keywords: String = String(cString: sqlite3_column_text(query, 19))
                 let comments: String = String(cString: sqlite3_column_text(query, 20))
+                let lastSaveString: String = String(cString: sqlite3_column_text(query, 21))
+                let lastSave: Date = ISO8601DateFormatter().date(from: lastSaveString)!
 
                 
                 if let d = td.day(forDate: date){
-                    d.add(workout: Workout(day: d, workout_number: workout_number, activity: activity, activity_type: activity_type, equipment: equipment, seconds: seconds, rpe: rpe, tss: tss, tss_method: tss_method, km: km, kj: kj, ascent_metres: ascent_metres, reps: reps, is_race: is_race, cadence: cadence, watts: watts, watts_estimated: watts_estimated, heart_rate: heart_rate, is_brick: is_brick, keywords: keywords, comments: comments))
+                    let w: Workout = Workout(day: d, workout_number: workout_number, activity: activity, activity_type: activity_type, equipment: equipment, seconds: seconds, rpe: rpe, tss: tss, tss_method: tss_method, km: km, kj: kj, ascent_metres: ascent_metres, reps: reps, is_race: is_race, cadence: cadence, watts: watts, watts_estimated: watts_estimated, heart_rate: heart_rate, is_brick: is_brick, keywords: keywords, comments: comments)
+                    w.lastSave = lastSave
+                    d.add(workout: w)
                 }
             }
             sqlite3_finalize(query)
+            query = nil
+            
+            var raceResults: [RaceResult] = []
+            // get race results
+            let raceResultsSQL: String = """
+                SELECT
+                date, race_number, type, brand, distance, name, category, overall_position, category_position, swim_seconds, t1_seconds, bike_seconds, t2_seconds, run_seconds, swim_km, bike_km, run_km, comments, race_report, last_save
+                FROM RaceResult
+            """
+            if sqlite3_prepare_v2(db, raceResultsSQL, -1, &query, nil) != SQLITE_OK{
+                print("unable to prepare query")
+                print("error: \(String(cString: sqlite3_errmsg(db)))")
+            }
+            while(sqlite3_step(query)) == SQLITE_ROW{
+                let dString: String  = String(cString: sqlite3_column_text(query, 0))
+                let date: Date = df.date(from: dString)!
+                let race_number: Int = Int(sqlite3_column_int(query, 1))
+                let type: String = String(cString: sqlite3_column_text(query, 2))
+                let brand: String = String(cString: sqlite3_column_text(query, 3))
+                let distance: String = String(cString: sqlite3_column_text(query, 4))
+                let name: String = String(cString: sqlite3_column_text(query, 5))
+                let category: String = String(cString: sqlite3_column_text(query, 6))
+                let overall_position: Int = Int(sqlite3_column_int(query, 7))
+                let category_position: Int = Int(sqlite3_column_int(query, 8))
+                let swim_seconds: Int = Int(sqlite3_column_int(query, 9))
+                let t1_seconds: Int = Int(sqlite3_column_int(query, 10))
+                let bike_seconds: Int = Int(sqlite3_column_int(query, 11))
+                let t2_seconds: Int = Int(sqlite3_column_int(query, 12))
+                let run_seconds: Int = Int(sqlite3_column_int(query, 13))
+                let swim_km: Double = sqlite3_column_double(query, 14)
+                let bike_km: Double = sqlite3_column_double(query, 15)
+                let run_km: Double = sqlite3_column_double(query, 16)
+                let comments: String = String(cString: sqlite3_column_text(query, 17))
+                let race_report: String = String(cString: sqlite3_column_text(query, 18))
+                let lastSaveString: String  = String(cString: sqlite3_column_text(query, 19))
+                let lastSave: Date = ISO8601DateFormatter().date(from: lastSaveString)!
 
+                let rr: RaceResult = RaceResult(date: date, raceNumber: race_number, type: type, brand: brand, distance: distance, name: name, category: category, overallPosition: overall_position, categoryPosition: category_position, swimSeconds: swim_seconds, t1Seconds: t1_seconds, bikeSeconds: bike_seconds, t2Seconds: t2_seconds, runSeconds: run_seconds, swimKM: swim_km, bikeKM: bike_km, runKM: run_km, comments: comments, raceReport: race_report)
+                rr.lastSave = lastSave
+                raceResults.append(rr)
+            }
+            sqlite3_finalize(query)
+            
+            td.raceResults = raceResults
+            
         }else{
             print("no valid DB connected to")
         }
 
         print("Cache built in \(Date().timeIntervalSince(start))s")
+        print(td.raceResults)
         return td
     }
     
@@ -385,6 +537,20 @@ class WorkoutDBAccess{
         return false
     }
     
+    private func exists(raceResult r: RaceResult) -> Bool{
+        if let db = db(){
+            let qString: String = "SELECT date, race_number FROM RaceResult WHERE date='\(df.string(from: r.date))' and race_number=\(r.raceNumber)"
+            var query: OpaquePointer? = nil
+            if sqlite3_prepare_v2(db, qString, -1, &query, nil) == SQLITE_OK{
+                let success = sqlite3_step(query) == SQLITE_ROW
+                sqlite3_finalize(query)
+                return success
+            }
+            sqlite3_finalize(query)
+        }
+        return false
+    }
+    
     private func db() -> OpaquePointer?{
         if database == nil{
             var dbPointer: OpaquePointer? = nil
@@ -440,6 +606,19 @@ class WorkoutDBAccess{
                 }
                 sqlite3_finalize(query)
             }
+
+            if sqlite3_prepare_v2(db, createRaceResultTableSQL, -1, &query, nil) != SQLITE_OK{
+                print("unable to prepare query")
+                print("error: \(String(cString: sqlite3_errmsg(db)))")
+            }else{
+                if(sqlite3_step(query)) == SQLITE_DONE{
+                    print("Created Race Result Table")
+                }else{
+                    print("Unable to create Race Result table")
+                }
+                sqlite3_finalize(query)
+            }
+
             return db
         }else{
             print("Failed to connect to DB \(url)")

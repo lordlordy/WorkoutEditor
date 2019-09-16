@@ -15,9 +15,7 @@ class DayViewController: NSViewController {
     @IBOutlet var workoutAC: WorkoutArrayController!
     @IBOutlet var workoutComments: NSTextView!
     @objc var selectedWorkout: Workout?
-    
-    @IBOutlet weak var tmpField: NSTextField!
-    
+        
     @IBAction func save(_ sender: Any) {
         if let day = representedObject as? Day{
             if let td = trainingDiary{

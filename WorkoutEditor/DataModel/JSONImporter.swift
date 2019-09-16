@@ -102,6 +102,30 @@ class JSONImporter{
                 p(progress / total, progressString(percentage: progress / total, start: start))
             }
         }
+        
+        for r in jsonDict["RaceResults"] as? [[String:Any]] ?? []{
+            let rr: RaceResult = RaceResult(date: df.date(from: r[RaceResultJSONProperty.iso8601DateString.rawValue] as! String)!,
+                                            raceNumber: r[RaceResultJSONProperty.raceNumber.rawValue] as! Int,
+                                            type: r[RaceResultJSONProperty.type.rawValue] as! String,
+                                            brand: r[RaceResultJSONProperty.brand.rawValue] as! String,
+                                            distance: r[RaceResultJSONProperty.distance.rawValue] as! String,
+                                            name: r[RaceResultJSONProperty.name.rawValue] as! String,
+                                            category: r[RaceResultJSONProperty.category.rawValue] as! String,
+                                            overallPosition: r[RaceResultJSONProperty.overallPosition.rawValue] as! Int,
+                                            categoryPosition: r[RaceResultJSONProperty.categoryPosition.rawValue] as! Int,
+                                            swimSeconds: r[RaceResultJSONProperty.swimSeconds.rawValue] as! Int,
+                                            t1Seconds: r[RaceResultJSONProperty.t1Seconds.rawValue] as! Int,
+                                            bikeSeconds: r[RaceResultJSONProperty.bikeSeconds.rawValue] as! Int,
+                                            t2Seconds: r[RaceResultJSONProperty.t2Seconds.rawValue] as! Int,
+                                            runSeconds: r[RaceResultJSONProperty.runSeconds.rawValue] as! Int,
+                                            swimKM: r[RaceResultJSONProperty.swimKM.rawValue] as! Double,
+                                            bikeKM: r[RaceResultJSONProperty.bikeKM.rawValue] as! Double,
+                                            runKM: r[RaceResultJSONProperty.runKM.rawValue] as! Double,
+                                            comments: r[RaceResultJSONProperty.comments.rawValue] as! String,
+                                            raceReport: r[RaceResultJSONProperty.raceReport.rawValue] as! String)
+            WorkoutDBAccess.shared.save(raceResult: rr)
+        }
+        
     }
     
     private func importSwiftTrainingDiaryJSON(jsonDict: [String: Any], intoTrainingDiary td: TrainingDiary, start: Date){
