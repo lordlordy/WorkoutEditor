@@ -22,16 +22,18 @@ class WorkoutDBAccess{
     
     private let createReadingTableSQL: String = """
             CREATE TABLE Reading(
+                pk varchar(32) NOT NULL,
                 date Date NOT NULL,
                 type varchar(16) NOT NULL,
                 value REAL NOT NULL,
-                PRIMARY KEY (date, type),
+                PRIMARY KEY (pk),
             FOREIGN KEY (date) REFERENCES Day(date)
             );
     """
     
     private let createWorkoutTableSQL: String = """
             CREATE TABLE Workout(
+                pk varchar(32) NOT NULL,
                 date Date NOT NULL,
                 workout_number INTEGER NOT NULL,
                 activity varchar(16) NOT NULL,
@@ -54,13 +56,14 @@ class WorkoutDBAccess{
                 keywords TEXT NOT NULL,
                 comments TEXT NOT NULL,
                 last_save Date,
-                PRIMARY KEY (date, workout_number),
+                PRIMARY KEY (pk),
                 FOREIGN KEY (date) REFERENCES Day(date)
             );
     """
     
     private let createRaceResultTableSQL: String = """
         CREATE TABLE RaceResult(
+            pk varchar(32) NOT NULL,
             date Date NOT NULL,
             race_number INTEGER NOT NULL,
             type varchar(16) NOT NULL,
@@ -81,7 +84,7 @@ class WorkoutDBAccess{
             comments TEXT NOT NULL,
             race_report TEXT NOT NULL,
             last_save Date,
-            PRIMARY KEY (date, race_number)
+            PRIMARY KEY (pk)
         );
     """
     
@@ -208,8 +211,8 @@ class WorkoutDBAccess{
             """
         }else{
             sqlString = """
-            INSERT INTO Reading (date, type, value)
-            VALUES ('\(df.string(from: r.date))', '\(r.type)', \(r.value))
+            INSERT INTO Reading (pk, date, type, value)
+            VALUES ('\(r.pk)','\(df.string(from: r.date))', '\(r.type)', \(r.value))
             """
         }
         let _ = execute(sql: sqlString)
@@ -264,9 +267,9 @@ class WorkoutDBAccess{
         }else{
             sqlString = """
             INSERT INTO Workout
-            (date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save)
+            (pk, date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save)
             VALUES
-            ('\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)", "\(ISO8601DateFormatter().string(from: Date()))")
+            ('\(w.pk)', '\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)", "\(ISO8601DateFormatter().string(from: Date()))")
             """
         }
         let _ = execute(sql: sqlString)
@@ -319,9 +322,9 @@ class WorkoutDBAccess{
         }else{
             sqlString = """
             INSERT INTO RaceResult
-            (date, race_number, type, brand, distance, name, category, overall_position, category_position, swim_seconds, t1_seconds, bike_seconds, t2_seconds, run_seconds, swim_km, bike_km, run_km, comments, race_report, last_save)
+            (pk, date, race_number, type, brand, distance, name, category, overall_position, category_position, swim_seconds, t1_seconds, bike_seconds, t2_seconds, run_seconds, swim_km, bike_km, run_km, comments, race_report, last_save)
             VALUES
-            ("\(r.iso8601DateString)", \(r.raceNumber), "\(r.type)", "\(r.brand)", "\(r.distance)", "\(r.name)", "\(r.category)", \(r.overallPosition), \(r.categoryPosition), \(r.swimSeconds), \(r.t1Seconds), \(r.bikeSeconds), \(r.t2Seconds), \(r.runSeconds), \(r.swimKM), \(r.bikeKM), \(r.runKM), "\(r.comments)", "\(r.raceReport)", "\(ISO8601DateFormatter().string(from: Date()))")
+            ('\(r.pk)', "\(r.iso8601DateString)", \(r.raceNumber), "\(r.type)", "\(r.brand)", "\(r.distance)", "\(r.name)", "\(r.category)", \(r.overallPosition), \(r.categoryPosition), \(r.swimSeconds), \(r.t1Seconds), \(r.bikeSeconds), \(r.t2Seconds), \(r.runSeconds), \(r.swimKM), \(r.bikeKM), \(r.runKM), "\(r.comments)", "\(r.raceReport)", "\(ISO8601DateFormatter().string(from: Date()))")
             """
         }
         let _ = execute(sql: sqlString)
@@ -463,7 +466,6 @@ class WorkoutDBAccess{
         }
 
         print("Cache built in \(Date().timeIntervalSince(start))s")
-        print(td.raceResults)
         return td
     }
     

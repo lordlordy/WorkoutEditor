@@ -10,6 +10,7 @@ import Foundation
 
 @objc class RaceResult: NSObject{
     
+    @objc var pk: String { return "\(iso8601DateString)-\(String(raceNumber))" }
     @objc var date: Date
     @objc var raceNumber: Int
     @objc var type: String

@@ -81,6 +81,7 @@ class ViewController: NSViewController {
             WorkoutDBAccess.shared.createDatabase(atURL: url )
             setDB(toURL: url)
             dbSwitch()
+            updateWindowTitle()
         }
     }
     
@@ -89,6 +90,7 @@ class ViewController: NSViewController {
             selectedDataWarehouseURL = url
             UserDefaults.standard.set(url, forKey: "DataWarehouseName")
             DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL).createDB()
+            updateWindowTitle()
         }
     }
     
@@ -132,6 +134,7 @@ class ViewController: NSViewController {
 
     
     private func dbSwitch(){
+        
         // need to ditch all open editing windows as they reference a different DB. Then need to reload main window
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
@@ -153,7 +156,6 @@ class ViewController: NSViewController {
             for c in child.children{
                 if let yvc = c as? YearsViewController{
                     yvc.reloadOutlineView()
-//                    yvc.representedObject = representedObject
                 }
             }
         }
