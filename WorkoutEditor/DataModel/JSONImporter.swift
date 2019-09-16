@@ -137,7 +137,8 @@ class JSONImporter{
 
         if let days = jsonDict["days"] as? [[String:Any]]{
             for d in days{
-                let day: Day = Day(date: ISO8601DateFormatter().date(from: d["iso8061DateString"] as! String)!, type: d["type"] as! String, comments: d["comments"] as? String ?? "", trainingDiary: td)
+                let dString: String = d["iso8061DateString"] as! String
+                let day: Day = Day(date: ISO8601DateFormatter().date(from: dString)!, type: d["type"] as! String, comments: d["comments"] as? String ?? "", trainingDiary: td)
                 if Calendar.current.compare(day.date, to: Calendar.current.date(from: DateComponents(year: 2005, month: 01, day: 02))!, toGranularity: .day) == ComparisonResult.orderedSame{
                     print("found that date")
                 }
@@ -158,7 +159,7 @@ class JSONImporter{
                 }
                 progress += 1.0
                 if let p = progressUpdater{
-                    p(progress / total, progressString(percentage: progress / total, start: start))
+                    p(progress / total, "Importing days... \(dString) \(progressString(percentage: progress / total, start: start))")
                 }
             }
         }
@@ -166,21 +167,23 @@ class JSONImporter{
         if let weights = jsonDict["weights"] as? [[String:Any]]{
             for w in weights{
                 // just set up dummy day for the save
-                let day: Day = Day(date: ISO8601DateFormatter().date(from: w["iso8061DateString"] as! String)!, type: "", comments: "", trainingDiary: td)
+                let dString: String = w["iso8061DateString"] as! String
+                let day: Day = Day(date: ISO8601DateFormatter().date(from: dString)!, type: "", comments: "", trainingDiary: td)
                 
                 WorkoutDBAccess.shared.save(reading: Reading(type: "kg", value: w["kg"] as! Double, parent: day))
                 WorkoutDBAccess.shared.save(reading: Reading(type: "fatPercentage", value: w["fatPercent"] as! Double, parent: day))
                 progress += 1.0
                 if let p = progressUpdater{
-                    p(progress / total, progressString(percentage: progress / total, start: start))
+                    p(progress / total, "Importing weights... \(dString) \(progressString(percentage: progress / total, start: start))")
                 }
             }
         }
 
         if let physiologicals = jsonDict["physiologicals"] as? [[String:Any]]{
             for physio in physiologicals{
+                let dString: String = physio["iso8061DateString"] as! String
                 // just set up dummy day for the save
-                let day: Day = Day(date: ISO8601DateFormatter().date(from: physio["iso8061DateString"] as! String)!, type: "", comments: "", trainingDiary: td)
+                let day: Day = Day(date: ISO8601DateFormatter().date(from: dString)!, type: "", comments: "", trainingDiary: td)
                 
                 WorkoutDBAccess.shared.save(reading: Reading(type: "restingHR", value: physio["restingHR"] as! Double, parent: day))
                 if let rmssd = physio["restingRMSSD"] as? Double{
@@ -191,7 +194,7 @@ class JSONImporter{
                 }
                 progress += 1.0
                 if let p = progressUpdater{
-                    p(progress / total, progressString(percentage: progress / total, start: start))
+                    p(progress / total, "Importing physiologicals... \(dString) \(progressString(percentage: progress / total, start: start))")
                 }
             }
         }
