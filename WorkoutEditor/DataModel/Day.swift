@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Day: NSObject{
+@objc class Day: NSObject{
     @objc var date: Date
     @objc var type: String
     @objc dynamic var comments: String
@@ -20,22 +20,29 @@ class Day: NSObject{
         return Array(allTypes.subtracting(usedTypes)).sorted(by: {$0 < $1})
     }
     
+    @objc dynamic var unsavedChanges: Bool = false
     
     private var readingDictionary: [String: Reading] = [:]
-    private var workoutDictionary: [Int: Workout] = [:]
-    var readingCount: Int{ return readingDictionary.count}
-    var workoutCount: Int{ return workoutDictionary.count}
+    var readingCount: Int{ return readings.count}
+    var workoutCount: Int{ return workouts.count}
     
     var trainingDiary: TrainingDiary
     
-    var swimKM: Double { return workoutDictionary.filter({$1.activity == "Swim"}).reduce(0.0, {$0 + $1.value.km})}
-    var bikeKM: Double { return workoutDictionary.filter({$1.activity == "Bike"}).reduce(0.0, {$0 + $1.value.km})}
-    var runKM: Double { return workoutDictionary.filter({$1.activity == "Run"}).reduce(0.0, {$0 + $1.value.km})}
-    var totalHours: Double { return Double(workoutDictionary.reduce(0, {$0 + $1.value.seconds}))/3600.0}
+    var swimKM: Double { return workouts.filter({$0.activity == "Swim"}).reduce(0.0, {$0 + $1.km})}
+    var bikeKM: Double { return workouts.filter({$0.activity == "Bike"}).reduce(0.0, {$0 + $1.km})}
+    var runKM: Double { return workouts.filter({$0.activity == "Run"}).reduce(0.0, {$0 + $1.km})}
+    var totalHours: Double { return Double(workouts.reduce(0, {$0 + $1.seconds}))/3600.0}
+    
+    
+    @objc var iso8601DateString: String{
+        let df: DateFormatter = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        return df.string(from: date)
+    }
     
     override var description: String{
         let s: String = readingDescriptions().joined(separator: ", ")
-        return "\(date): \(type) workouts:\(workoutDictionary.count) \(s)"
+        return "\(date): \(type) workouts:\(workouts.count) \(s)"
     }
     
     init(date: Date, type: String, comments: String, trainingDiary td: TrainingDiary){
@@ -46,10 +53,6 @@ class Day: NSObject{
     }
     
     func add(workout: Workout){
-        if workoutDictionary[workout.workoutNumber] != nil{
-            workout.workoutNumber = workouts.count
-        }
-        workoutDictionary[workout.workoutNumber] = workout
         workouts.append(workout)
         workout.day = self
     }
@@ -67,7 +70,8 @@ class Day: NSObject{
     }
     
     func defaultWorkout() -> Workout{
-        return Workout(day: self, workout_number: workouts.count, activity: "Swim", activity_type: "Squad", equipment: "", seconds: 0, rpe: 5.0, tss: 50.0, tss_method: "PacePower", km: 0.0, kj: 0.0, ascent_metres: 0.0, reps: 0, is_race: false, cadence: 0, watts: 0, watts_estimated: true, heart_rate: 0, is_brick: false, keywords: "", comments: "")
+        let w = Workout(day: self, workout_number: workouts.count + 1, activity: "Swim", activity_type: "Squad", equipment: "", seconds: 0, rpe: 5.0, tss: 50, tss_method: "PacePower", km: 0.0, kj: 0, ascent_metres: 0, reps: 0, is_race: false, cadence: 0, watts: 0, watts_estimated: true, heart_rate: 0, is_brick: false, keywords: "", comments: "")
+        return w
     }
 
     func reading(forType type: String) -> Reading?{
@@ -76,6 +80,18 @@ class Day: NSObject{
     
     func readingDescriptions() -> [String]{
         return readingDictionary.values.map({$0.description})
+    }
+    
+    var workoutTypes: Set<WorkoutType>{
+        var result: Set<WorkoutType> = []
+        for w in workouts{
+            result = result.union(w.types)
+        }
+        return result
+    }
+    
+    func workoutsFor(type: WorkoutType) -> [Workout]{
+        return workouts.filter({$0.isType(workoutType: type)})
     }
     
 }
@@ -87,39 +103,38 @@ extension Day: PeriodNode{
         return df.string(from: date)
     }
     
-    var children: [PeriodNode] {
-        var result: [PeriodNode] = []
-        for w in workoutDictionary.values{
-            result.append(w)
-        }
-        return result
-    }
-    
+    @objc dynamic var children: [PeriodNode] { return workouts }
     var childCount: Int { return workoutCount }
-    var totalKM: Double { return workoutDictionary.reduce(0.0, {$0 + $1.value.km}) }
-    var totalSeconds: TimeInterval { return TimeInterval(workoutDictionary.reduce(0, {$0 + $1.value.seconds})) }
-    var totalTSS: Double { return workoutDictionary.reduce(0.0, {$0 + $1.value.tss}) }
-    var swimSeconds: TimeInterval { return TimeInterval(workoutDictionary.filter({$1.activity == "Swim"}).reduce(0, {$0 + $1.value.seconds})) }
-    var swimTSS: Double { return workoutDictionary.filter({$1.activity == "Swim"}).reduce(0.0, {$0 + $1.value.tss}) }
-    var bikeSeconds: TimeInterval { return TimeInterval(workoutDictionary.filter({$1.activity == "Bike"}).reduce(0, {$0 + $1.value.seconds})) }
-    var bikeTSS: Double { return workoutDictionary.filter({$1.activity == "Bike"}).reduce(0.0, {$0 + $1.value.tss}) }
-    var runSeconds: TimeInterval { return TimeInterval(workoutDictionary.filter({$1.activity == "Run"}).reduce(0, {$0 + $1.value.seconds})) }
-    var runTSS: Double { return workoutDictionary.filter({$1.activity == "Run"}).reduce(0.0, {$0 + $1.value.tss}) }
+    var totalKM: Double { return workouts.reduce(0.0, {$0 + $1.km}) }
+    var totalSeconds: TimeInterval { return TimeInterval(workouts.reduce(0, {$0 + $1.seconds})) }
+    var totalTSS: Int { return workouts.reduce(0, {$0 + $1.tss}) }
+    var swimSeconds: TimeInterval { return TimeInterval(workouts.filter({$0.activity == "Swim"}).reduce(0, {$0 + $1.seconds})) }
+    var swimTSS: Int { return workouts.filter({$0.activity == "Swim"}).reduce(0, {$0 + $1.tss}) }
+    var bikeSeconds: TimeInterval { return TimeInterval(workouts.filter({$0.activity == "Bike"}).reduce(0, {$0 + $1.seconds})) }
+    var bikeTSS: Int { return workouts.filter({$0.activity == "Bike"}).reduce(0, {$0 + $1.tss}) }
+    var runSeconds: TimeInterval { return TimeInterval(workouts.filter({$0.activity == "Run"}).reduce(0, {$0 + $1.seconds})) }
+    var runTSS: Int { return workouts.filter({$0.activity == "Run"}).reduce(0, {$0 + $1.tss}) }
     var fromDate: Date { return date }
     var toDate: Date { return date }
     var isLeaf: Bool { return workoutCount == 0 }
     var leafCount: Int { return workoutCount }
 
-    
-    
     @objc var sleep:            Double      { return reading(forType: "sleep")?.value ?? 0.0 }
-    @objc var sleepQuality:     Double      { return reading(forType: "sleepQuality")?.value ?? 0.0 }
+    @objc var sleepQualityScore:Double      { return reading(forType: "sleepQualityScore")?.value ?? 0.0 }
     @objc var motivation:       Double      { return reading(forType: "motivation")?.value ?? 0.0 }
     @objc var fatigue:          Double      { return reading(forType: "fatigue")?.value ?? 0.0 }
     @objc var kg:               Double      { return reading(forType: "kg")?.value ?? 0.0 }
     @objc var fatPercentage:    Double      { return reading(forType: "fatPercentage")?.value ?? 0.0 }
-    @objc var restingHR:        Double      { return reading(forType: "restingHR")?.value ?? 0.0 }
+    @objc var restingHR:        Int         { return Int(reading(forType: "restingHR")?.value ?? 0.0) }
     @objc var sdnn:             Double      { return reading(forType: "SDNN")?.value ?? 0.0 }
     @objc var rMSSD:            Double      { return reading(forType: "rMSSD")?.value ?? 0.0 }
+    @objc var days:             Set<Day>    { return Set([self])}
     
+}
+
+extension Day{
+    override func setValue(_ value: Any?, forKey key: String) {
+        super.setValue(value, forKey: key)
+        unsavedChanges = true
+    }
 }

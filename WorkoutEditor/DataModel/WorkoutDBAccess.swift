@@ -39,18 +39,18 @@ class WorkoutDBAccess{
                 equipment varchar(32) NOT NULL,
                 seconds INTEGER NOT NULL,
                 rpe REAL NOT NULL,
-                tss REAL NOT NULL,
+                tss INTEGER NOT NULL,
                 tss_method varchar(16) NOT NULL,
                 km REAL NOT NULL,
-                kj REAL NOT NULL,
-                ascent_metres REAL NOT NULL,
+                kj INTEGER NOT NULL,
+                ascent_metres INTEGER NOT NULL,
                 reps INTEGER NOT NULL,
-                is_race INTEGER NOT NULL,
+                is_race BOOLEAN NOT NULL,
                 cadence INTEGER,
-                watts REAL NOT NULL,
-                watts_estimated int NOT NULL,
-                heart_rate int NOT NULL,
-                is_brick int NOT NULL,
+                watts INTEGER NOT NULL,
+                watts_estimated BOOLEAN NOT NULL,
+                heart_rate INTEGER NOT NULL,
+                is_brick BOOLEAN NOT NULL,
                 keywords TEXT NOT NULL,
                 comments TEXT NOT NULL,
                 PRIMARY KEY (date, workout_number),
@@ -65,6 +65,9 @@ class WorkoutDBAccess{
 
     private var df: DateFormatter = DateFormatter()
     private var database: OpaquePointer?
+    var dbName: String{
+        return dbURL.lastPathComponent
+    }
     
     func createDatabase(atURL url: URL){
         let _ = createDB(atURL: url)
@@ -161,6 +164,7 @@ class WorkoutDBAccess{
         for w in d.workouts{
             save(workout: w)
         }
+        
 
     }
     
@@ -281,15 +285,15 @@ class WorkoutDBAccess{
                 let equipment: String = String(cString: sqlite3_column_text(query, 4))
                 let seconds: Int = Int(sqlite3_column_int(query, 5))
                 let rpe: Double = sqlite3_column_double(query, 6)
-                let tss: Double = sqlite3_column_double(query, 7)
+                let tss: Int = Int(sqlite3_column_int(query, 7))
                 let tss_method: String = String(cString: sqlite3_column_text(query, 8))
                 let km: Double = sqlite3_column_double(query, 9)
-                let kj: Double = sqlite3_column_double(query, 10)
-                let ascent_metres: Double = sqlite3_column_double(query, 11)
+                let kj: Int = Int(sqlite3_column_int(query, 10))
+                let ascent_metres: Int = Int(sqlite3_column_int(query, 11))
                 let reps: Int = Int(sqlite3_column_int(query, 12))
                 let is_race: Bool = Int(sqlite3_column_int(query, 13)) > 0
                 let cadence: Int = Int(sqlite3_column_int(query, 14))
-                let watts: Double = sqlite3_column_double(query, 15)
+                let watts: Int = Int(sqlite3_column_int(query, 15))
                 let watts_estimated: Bool = Int(sqlite3_column_int(query, 16)) > 0
                 let heart_rate: Int = Int(sqlite3_column_int(query, 17))
                 let is_brick: Bool = Int(sqlite3_column_int(query, 18)) > 0
@@ -388,7 +392,7 @@ class WorkoutDBAccess{
                 database = dbPointer
             }else{
                 print("Failed to connect to DB \(dbURL). Trying to create...")
-                return createDB(atURL: dbURL)
+                database = createDB(atURL: dbURL)
             }
         }
         return database

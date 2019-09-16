@@ -13,6 +13,7 @@ class YearsViewController: NSViewController {
     @objc dynamic var nodes: [PeriodNode] = []
     @IBOutlet weak var toggleYearWeeksButton: NSButton!
     @IBOutlet weak var outlineView: NSOutlineView!
+    @IBOutlet var years: NSTreeController!
     private var months: Bool = true
     
     override func viewDidLoad() {
@@ -30,6 +31,34 @@ class YearsViewController: NSViewController {
         outlineView.expandItem(outlineView.item(atRow: 0))
         outlineView.expandItem(outlineView.item(atRow: 1))
         outlineView.expandItem(outlineView.item(atRow: 2))
+        outlineView.expandItem(outlineView.item(atRow: 3))
+    }
+    
+    @IBAction func exportSelection(_ sender: Any) {
+        if let url = OpenAndSaveDialogues().saveFilePath(suggestedFileName: "Days", allowFileTypes: ["json"], directory: nil){
+            
+            var days: Set<Day> = Set()
+            if let periodNodes = years.selectedObjects as? [PeriodNode]{
+                for pn in periodNodes{
+                    days = days.union(pn.days)
+                }
+            }
+            if let jsonString = JSONExporter().createJSON(forDays: Array(days)){
+                do{
+                    try jsonString.write(to: url, atomically: true, encoding: String.Encoding.utf8.rawValue)
+                }catch{
+                    print("Unable to save JSON")
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    @IBAction func reload(_ sender: Any) {
+        if let td = trainingDiary{
+            td.setNodesForRebuild()
+        }
+        reloadOutlineView()
     }
     
     var trainingDiary: TrainingDiary?{
@@ -55,6 +84,7 @@ class YearsViewController: NSViewController {
             outlineView.expandItem(outlineView.item(atRow: 0))
             outlineView.expandItem(outlineView.item(atRow: 1))
             outlineView.expandItem(outlineView.item(atRow: 2))
+            outlineView.expandItem(outlineView.item(atRow: 3))
         }
     }
         

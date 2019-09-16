@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73145DEE232BDEA5009DBADF /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DED232BDEA5009DBADF /* LinkedList.swift */; };
+		73145DF0232BDEC2009DBADF /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DEF232BDEC2009DBADF /* Queue.swift */; };
+		73145DF2232BDEEB009DBADF /* RollingSumQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF1232BDEEB009DBADF /* RollingSumQueue.swift */; };
+		73145DF4232BDF6A009DBADF /* Maths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF3232BDF6A009DBADF /* Maths.swift */; };
+		73145DF6232F86C2009DBADF /* JSONProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF5232F86C2009DBADF /* JSONProperties.swift */; };
+		73145DF8232F87D2009DBADF /* JSONExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF7232F87D2009DBADF /* JSONExporter.swift */; };
+		733A6E49232A639C001087E9 /* DataWarehouseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E48232A639C001087E9 /* DataWarehouseGenerator.swift */; };
+		733A6E4B232A6CBD001087E9 /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4A232A6CBD001087E9 /* WorkoutType.swift */; };
+		733A6E4D232A8F33001087E9 /* WarehouseColumns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */; };
+		733A6E4F232A93B9001087E9 /* SleepQualityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */; };
 		737800352319359E00E33AA0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800342319359E00E33AA0 /* AppDelegate.swift */; };
 		737800372319359E00E33AA0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800362319359E00E33AA0 /* ViewController.swift */; };
 		737800392319359F00E33AA0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 737800382319359F00E33AA0 /* Assets.xcassets */; };
@@ -50,6 +60,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		73145DED232BDEA5009DBADF /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
+		73145DEF232BDEC2009DBADF /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		73145DF1232BDEEB009DBADF /* RollingSumQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingSumQueue.swift; sourceTree = "<group>"; };
+		73145DF3232BDF6A009DBADF /* Maths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maths.swift; sourceTree = "<group>"; };
+		73145DF5232F86C2009DBADF /* JSONProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONProperties.swift; sourceTree = "<group>"; };
+		73145DF7232F87D2009DBADF /* JSONExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONExporter.swift; sourceTree = "<group>"; };
+		733A6E48232A639C001087E9 /* DataWarehouseGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataWarehouseGenerator.swift; sourceTree = "<group>"; };
+		733A6E4A232A6CBD001087E9 /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
+		733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarehouseColumns.swift; sourceTree = "<group>"; };
+		733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepQualityMapper.swift; sourceTree = "<group>"; };
 		737800312319359E00E33AA0 /* WorkoutEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		737800342319359E00E33AA0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		737800362319359E00E33AA0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +165,10 @@
 				73EC996E2327D63F00FE941A /* Date+Extension.swift */,
 				73EC99752328109E00FE941A /* NumberToTimeFormatter.swift */,
 				73EC9977232904E500FE941A /* Day.storyboard */,
+				73145DED232BDEA5009DBADF /* LinkedList.swift */,
+				73145DEF232BDEC2009DBADF /* Queue.swift */,
+				73145DF1232BDEEB009DBADF /* RollingSumQueue.swift */,
+				73145DF3232BDF6A009DBADF /* Maths.swift */,
 			);
 			path = WorkoutEditor;
 			sourceTree = "<group>";
@@ -177,6 +201,12 @@
 				73D5438D23267E3D0016AE1E /* JSONImporter.swift */,
 				73EC996A2327B96200FE941A /* TrainingDiary.swift */,
 				73EC996C2327CC0500FE941A /* PeriodNode.swift */,
+				733A6E48232A639C001087E9 /* DataWarehouseGenerator.swift */,
+				733A6E4A232A6CBD001087E9 /* WorkoutType.swift */,
+				733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */,
+				733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */,
+				73145DF5232F86C2009DBADF /* JSONProperties.swift */,
+				73145DF7232F87D2009DBADF /* JSONExporter.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -342,20 +372,30 @@
 			files = (
 				737800372319359E00E33AA0 /* ViewController.swift in Sources */,
 				73EC996F2327D63F00FE941A /* Date+Extension.swift in Sources */,
+				733A6E4F232A93B9001087E9 /* SleepQualityMapper.swift in Sources */,
+				73145DF0232BDEC2009DBADF /* Queue.swift in Sources */,
 				73D5438E23267E3D0016AE1E /* JSONImporter.swift in Sources */,
+				733A6E4D232A8F33001087E9 /* WarehouseColumns.swift in Sources */,
+				73145DF6232F86C2009DBADF /* JSONProperties.swift in Sources */,
 				73D5438A232671470016AE1E /* OpenAndSaveDialogues.swift in Sources */,
+				73145DEE232BDEA5009DBADF /* LinkedList.swift in Sources */,
 				737800662319371C00E33AA0 /* WorkoutDBAccess.swift in Sources */,
 				73EC997F2329770C00FE941A /* WorkoutArrayController.swift in Sources */,
 				73EC997A232906C800FE941A /* DayViewController.swift in Sources */,
+				733A6E4B232A6CBD001087E9 /* WorkoutType.swift in Sources */,
 				737800352319359E00E33AA0 /* AppDelegate.swift in Sources */,
+				73145DF8232F87D2009DBADF /* JSONExporter.swift in Sources */,
 				7378006A23197CFE00E33AA0 /* Day.swift in Sources */,
 				73EC99742327DEB300FE941A /* YearsViewController.swift in Sources */,
 				73EC997D232948AA00FE941A /* ReadingsArrayController.swift in Sources */,
+				73145DF2232BDEEB009DBADF /* RollingSumQueue.swift in Sources */,
 				7378006823197CB500E33AA0 /* Reading.swift in Sources */,
 				73EC99762328109E00FE941A /* NumberToTimeFormatter.swift in Sources */,
+				73145DF4232BDF6A009DBADF /* Maths.swift in Sources */,
 				73EC996B2327B96200FE941A /* TrainingDiary.swift in Sources */,
 				73EC996D2327CC0500FE941A /* PeriodNode.swift in Sources */,
 				7378006C231988A200E33AA0 /* Workout.swift in Sources */,
+				733A6E49232A639C001087E9 /* DataWarehouseGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

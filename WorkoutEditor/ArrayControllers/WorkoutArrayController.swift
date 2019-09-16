@@ -13,7 +13,14 @@ class WorkoutArrayController: NSArrayController {
     var day: Day?
         
     override func newObject() -> Any {
-        return day!.defaultWorkout()
+        if let d = day{
+            d.unsavedChanges = true
+            return d.defaultWorkout()
+        }else{
+            return super.newObject()
+        }
     }
+    
+
         
 }

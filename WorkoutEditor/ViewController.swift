@@ -11,7 +11,9 @@ import Cocoa
 class ViewController: NSViewController {
 
     @IBOutlet weak var progressBar: NSProgressIndicator!
+    @IBOutlet weak var progressField: NSTextField!
     private var mainWindowName: String = ""
+    private var selectedDataWarehouseURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")!.appendingPathComponent("DefaultDataWarehouse.sqlite3")
     
     var trainingDiary: TrainingDiary{
         return representedObject as! TrainingDiary
@@ -21,9 +23,11 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         if let url = UserDefaults.standard.url(forKey: "DatabaseName"){
-            print("setting url....")
-            print(url)
             WorkoutDBAccess.shared.setDBURL(toURL: url)
+        }
+        
+        if let url = UserDefaults.standard.url(forKey: "DataWarehouseName"){
+            selectedDataWarehouseURL = url
         }
         
         representedObject = WorkoutDBAccess.shared.createTrainingDiary()
@@ -32,6 +36,7 @@ class ViewController: NSViewController {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
         ValueTransformer.setValueTransformer(NumberToTimeFormatter(), forName: NSValueTransformerName(rawValue: "NumberToTimeFormatter"))
     }
     
@@ -39,18 +44,29 @@ class ViewController: NSViewController {
         if let url = OpenAndSaveDialogues().selectedPath(withTitle: "select database",andFileTypes: ["sqlite3"], directory: FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")) {
             setDB(toURL: url)
             dbSwitch()
+            updateWindowTitle()
+        }
+    }
+
+    @IBAction func selectDataWarehouse(_ sender: Any) {
+        if let url = OpenAndSaveDialogues().selectedPath(withTitle: "select data warehouse",andFileTypes: ["sqlite3"], directory: FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")) {
+            selectedDataWarehouseURL = url
+            UserDefaults.standard.set(url, forKey: "DataWarehouseName")
+            updateWindowTitle()
         }
     }
     
     private func setDB(toURL url: URL){
         WorkoutDBAccess.shared.setDBURL(toURL: url)
         UserDefaults.standard.set(url, forKey: "DatabaseName")
+    }
+    
+    private func updateWindowTitle(){
         if let w = view.window{
-            w.title = url.lastPathComponent
+            w.title = "Database: \(WorkoutDBAccess.shared.dbName)  ~~  Warehouse: \(selectedDataWarehouseURL.lastPathComponent)"
             mainWindowName = w.title
         }
     }
-    
 
     
     @IBAction func newDB(_ sender: Any){
@@ -60,7 +76,14 @@ class ViewController: NSViewController {
             setDB(toURL: url)
             dbSwitch()
         }
-        
+    }
+    
+    @IBAction func newDataWarehouse(_ sender: Any){
+        if let url = OpenAndSaveDialogues().saveFilePath(suggestedFileName: "NewDataWarehouse", allowFileTypes: ["sqlite3"], directory: FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")){
+            selectedDataWarehouseURL = url
+            UserDefaults.standard.set(url, forKey: "DataWarehouseName")
+            DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL).createDB()
+        }
     }
     
     @IBAction func importJSON(_ sender: Any){
@@ -69,21 +92,31 @@ class ViewController: NSViewController {
             progressBar.doubleValue = 0.0
             DispatchQueue.global(qos: .userInitiated).async {
                 importer.importDiary(fromURL: url, intoTrainingDiary: self.trainingDiary)
+                DispatchQueue.main.async {
+                    self.dbSwitch()
+                }
             }
         }
     }
     
-    private func progressUpdater(percentage: Double) -> Void{
+    @IBAction func generateWarehouse(_ sender: Any){
+        let generator = DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL)
+        self.progressBar.doubleValue = 0.0
+        DispatchQueue.global(qos: .userInitiated).async {
+            generator.generate(progressUpdater: self.progressUpdater)
+        }
+    }
+    
+    private func progressUpdater(percentage: Double, text: String) -> Void{
         DispatchQueue.main.async {
             self.progressBar.doubleValue = percentage * 100
+            self.progressField.stringValue = text
         }
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        if let w = view.window{
-            w.title = WorkoutDBAccess.shared.getDBURL().lastPathComponent
-        }
+        updateWindowTitle()
     }
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {

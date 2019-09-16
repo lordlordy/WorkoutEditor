@@ -18,6 +18,24 @@ extension Date{
         return formatter.string(from: self)
     }
     
+    var monthAsStringShort: String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM"
+        return formatter.string(from: self)
+    }
+    
+    var dayNameShort: String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E"
+        return formatter.string(from: self)
+    }
+    
+    var quarter: String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "q"
+        return formatter.string(from: self)
+    }
+    
     //return start of day - ie time component 00:00:00
     var startOfDay: Date{
         var dc = Calendar.current.dateComponents([.day, .month,.year], from: self)

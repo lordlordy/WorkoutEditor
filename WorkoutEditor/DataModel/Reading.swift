@@ -23,8 +23,11 @@ class Reading: NSObject{
         self.day = parent
     }
     
-    
-    
-    
-    
+}
+
+extension Reading{
+    override func setValue(_ value: Any?, forKey key: String) {
+        super.setValue(value, forKey: key)
+        day.unsavedChanges = true
+    }
 }

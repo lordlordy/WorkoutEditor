@@ -42,6 +42,11 @@ class TrainingDiary: NSObject{
         return dateFormatter
     }
 
+    func setNodesForRebuild(){
+        monthlyNodes = nil
+        weeklyNodes = nil
+    }
+    
     func day(forDate d: Date) -> Day?{
         return dayCache[df.string(from: d)]
     }
@@ -59,12 +64,19 @@ class TrainingDiary: NSObject{
     // TO DO - change this to throws and handle not saving
     func save(day d: Day){
         WorkoutDBAccess.shared.save(day: d)
-    
+        d.unsavedChanges = false
+        for w in d.workouts{
+            w.unsavedChanges = false
+        }
     }
     
     func setReload(){
         monthlyNodes = nil
         weeklyNodes = nil
+    }
+
+    func ascendingOrderedDays() -> [Day]{
+        return dayCache.values.sorted(by: {$0.date < $1.date})
     }
     
     func descendingOrderedDays() -> [Day]{
@@ -101,7 +113,7 @@ class TrainingDiary: NSObject{
             Reading(type: "sleepQuality", value: 0.75, parent: day),
             Reading(type: "motivation", value: 5.0, parent: day),
             Reading(type: "fatigue", value: 5.0, parent: day)])
-        
+        add(day: day)
         return day
     }
     
@@ -113,13 +125,13 @@ extension TrainingDiary: PeriodNode{
     var childCount: Int { return children.count }
     var totalKM: Double { return children.reduce(0.0, {$0 + $1.totalKM}) }
     var totalSeconds: TimeInterval { return children.reduce(0.0, {$0 + $1.totalSeconds}) }
-    var totalTSS: Double { return children.reduce(0.0, {$0 + $1.totalTSS}) }
+    var totalTSS: Int { return children.reduce(0, {$0 + $1.totalTSS}) }
     var swimSeconds: TimeInterval { return children.reduce(0.0, {$0 + $1.swimSeconds}) }
-    var swimTSS: Double { return children.reduce(0.0, {$0 + $1.swimTSS}) }
+    var swimTSS: Int { return children.reduce(0, {$0 + $1.swimTSS}) }
     var bikeSeconds: TimeInterval { return children.reduce(0.0, {$0 + $1.bikeSeconds}) }
-    var bikeTSS: Double { return children.reduce(0.0, {$0 + $1.bikeTSS}) }
+    var bikeTSS: Int { return children.reduce(0, {$0 + $1.bikeTSS}) }
     var runSeconds: TimeInterval { return children.reduce(0.0, {$0 + $1.runSeconds}) }
-    var runTSS: Double { return children.reduce(0.0, {$0 + $1.runTSS}) }
+    var runTSS: Int { return children.reduce(0, {$0 + $1.runTSS}) }
     var fromDate: Date { return dayCache.values.map({$0.date}).min() ?? Date() }
     var toDate: Date { return dayCache.values.map({$0.date}).max() ?? Date() }
     var isLeaf: Bool { return false}
@@ -129,8 +141,8 @@ extension TrainingDiary: PeriodNode{
     @objc var sleep: Double {
         return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleep}) / Double(children.count) : 0.0
     }
-    @objc var sleepQuality: Double {
-        return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleepQuality}) / Double(children.count) : 0.0
+    @objc var sleepQualityScore: Double {
+        return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleepQualityScore}) / Double(children.count) : 0.0
     }
     @objc var motivation: Double {
         return children.count > 0 ? children.reduce(0.0, {$0 + $1.motivation}) / Double(children.count) : 0.0
@@ -148,10 +160,10 @@ extension TrainingDiary: PeriodNode{
         let denominator: Double = children.reduce(0.0, {$0 + ($1.fatPercentage > 0 ? 1.0 : 0.0)})
         return denominator > 0 ? numerator/denominator : 0.0
     }
-    @objc var restingHR: Double {
-        let numerator: Double = children.reduce(0.0, {$0 + $1.restingHR})
+    @objc var restingHR: Int {
+        let numerator: Int = children.reduce(0, {$0 + $1.restingHR})
         let denominator: Double = children.reduce(0.0, {$0 + ($1.restingHR > 0 ? 1.0 : 0.0)})
-        return denominator > 0 ? numerator/denominator : 0.0
+        return denominator > 0 ? Int(Double(numerator)/denominator) : 0
     }
     @objc var sdnn: Double {
         let numerator: Double = children.reduce(0.0, {$0 + $1.sdnn})
@@ -162,6 +174,18 @@ extension TrainingDiary: PeriodNode{
         let numerator: Double = children.reduce(0.0, {$0 + $1.rMSSD})
         let denominator: Double = children.reduce(0.0, {$0 + ($1.rMSSD > 0 ? 1.0 : 0.0)})
         return denominator > 0 ? numerator/denominator : 0.0
+    }
+    
+    @objc var unsavedChanges: Bool{
+        return children.reduce(false, {$0 || $1.unsavedChanges})
+    }
+    
+    @objc var days: Set<Day>{
+        var result: Set<Day> = Set()
+        for c in children{
+            result = result.union(c.days)
+        }
+        return result
     }
     
 }
@@ -176,8 +200,10 @@ extension TrainingDiary{
         for d in descendingOrderedDays(){
             let year: String = String(d.date.year)
             let month: String = d.date.monthAsString
+            let quarter: String = "Q\(d.date.quarter)"
             var yearNode: PeriodNodeImplementation
             var monthNode: PeriodNodeImplementation
+            var quarterNode: PeriodNodeImplementation
             
             if let yNode = yearNodes[year]{
                 yearNode = yNode
@@ -187,11 +213,18 @@ extension TrainingDiary{
                 yearNodes[year] = yearNode
             }
             
-            if let mNode = yearNode.child(forName: month){
+            if let qNode = yearNode.child(forName: quarter){
+                quarterNode = qNode
+            }else{
+                quarterNode = PeriodNodeImplementation(name: quarter, from: Date(), to: Date(), type: "Quarter")
+                yearNode.add(child: quarterNode)
+            }
+            
+            if let mNode = quarterNode.child(forName: month){
                 monthNode = mNode
             }else{
                 monthNode = PeriodNodeImplementation(name: d.date.monthAsString, from: d.date.startOfMonth, to: d.date.endOfMonth, type: "Month")
-                yearNode.add(child: monthNode)
+                quarterNode.add(child: monthNode)
             }
             monthNode.add(child: d)
         }
@@ -250,16 +283,16 @@ extension TrainingDiary{
         
         @objc var totalKM: Double { return children.reduce(0.0, {$0 + $1.totalKM}) }
         @objc var totalSeconds: Double { return TimeInterval(children.reduce(0.0, {$0 + $1.totalSeconds})) }
-        @objc var totalTSS: Double { return children.reduce(0.0, {$0 + $1.totalTSS}) }
+        @objc var totalTSS: Int { return children.reduce(0, {$0 + $1.totalTSS}) }
         @objc var swimKM: Double { return children.reduce(0.0, {$0 + $1.swimKM}) }
         @objc var swimSeconds: Double { return children.reduce(0.0, {$0 + $1.swimSeconds}) }
-        @objc var swimTSS: Double { return children.reduce(0.0, {$0 + $1.swimTSS}) }
+        @objc var swimTSS: Int { return children.reduce(0, {$0 + $1.swimTSS}) }
         @objc var bikeKM: Double { return children.reduce(0.0, {$0 + $1.bikeKM}) }
         @objc var bikeSeconds: Double { return children.reduce(0.0, {$0 + $1.bikeSeconds}) }
-        @objc var bikeTSS: Double { return children.reduce(0.0, {$0 + $1.bikeTSS}) }
+        @objc var bikeTSS: Int { return children.reduce(0, {$0 + $1.bikeTSS}) }
         @objc var runKM: Double { return children.reduce(0.0, {$0 + $1.runKM}) }
         @objc var runSeconds: Double { return children.reduce(0.0, {$0 + $1.runSeconds}) }
-        @objc var runTSS: Double { return children.reduce(0.0, {$0 + $1.runTSS}) }
+        @objc var runTSS: Int { return children.reduce(0, {$0 + $1.runTSS}) }
         @objc var fromDate: Date {
             let childFromDate = children.map({$0.fromDate}).sorted(by: {$0 < $1})
             if childFromDate.count > 0{
@@ -304,8 +337,8 @@ extension TrainingDiary{
         @objc var sleep: Double {
             return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleep}) / Double(children.count) : 0.0
         }
-        @objc var sleepQuality: Double {
-            return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleepQuality}) / Double(children.count) : 0.0
+        @objc var sleepQualityScore: Double {
+            return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleepQualityScore}) / Double(children.count) : 0.0
         }
         @objc var motivation: Double {
             return children.count > 0 ? children.reduce(0.0, {$0 + $1.motivation}) / Double(children.count) : 0.0
@@ -323,10 +356,10 @@ extension TrainingDiary{
             let denominator: Double = children.reduce(0.0, {$0 + ($1.fatPercentage > 0 ? 1.0 : 0.0)})
             return denominator > 0 ? numerator/denominator : 0.0
         }
-        @objc var restingHR: Double {
-            let numerator: Double = children.reduce(0.0, {$0 + $1.restingHR})
+        @objc var restingHR: Int {
+            let numerator: Int = children.reduce(0, {$0 + $1.restingHR})
             let denominator: Double = children.reduce(0.0, {$0 + ($1.restingHR > 0 ? 1.0 : 0.0)})
-            return denominator > 0 ? numerator/denominator : 0.0
+            return denominator > 0 ? Int(Double(numerator)/denominator) : 0
         }
         @objc var sdnn: Double {
             let numerator: Double = children.reduce(0.0, {$0 + $1.sdnn})
@@ -337,6 +370,18 @@ extension TrainingDiary{
             let numerator: Double = children.reduce(0.0, {$0 + $1.rMSSD})
             let denominator: Double = children.reduce(0.0, {$0 + ($1.rMSSD > 0 ? 1.0 : 0.0)})
             return denominator > 0 ? numerator/denominator : 0.0
+        }
+        
+        @objc var unsavedChanges: Bool{
+            return children.reduce(false, {$0 || $1.unsavedChanges})
+        }
+        
+        @objc var days: Set<Day>{
+            var result: Set<Day> = Set()
+            for c in children{
+                result = result.union(c.days)
+            }
+            return result
         }
     }
 
