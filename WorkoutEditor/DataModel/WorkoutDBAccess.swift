@@ -320,10 +320,11 @@ class WorkoutDBAccess{
             bike_km=\(r.bikeKM),
             run_km=\(r.runKM),
             comments="\(r.comments)",
-            race_report="\(r.raceReport)"
+            race_report="\(r.raceReport)",
             last_save="\(ISO8601DateFormatter().string(from: Date()))"
-            WHERE date='\(df.string(from: r.date))' and race_number=\(r.raceNumber)
+            WHERE date='\(r.iso8601DateString)' and race_number=\(r.raceNumber)
             """
+            print(sqlString)
         }else{
             sqlString = """
             INSERT INTO RaceResult

@@ -109,6 +109,12 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="test" id="oxb-aG-AZ3">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="test:" target="Ady-hI-5gd" id="8Qv-do-IIg"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
@@ -2974,7 +2980,7 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.99583333333333335" horizontal="YES" id="7OJ-PT-QQI">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="7OJ-PT-QQI">
                                     <rect key="frame" x="1" y="263" width="469" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
