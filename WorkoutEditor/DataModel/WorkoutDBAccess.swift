@@ -9,6 +9,12 @@
 import SQLite3
 import Foundation
 
+enum TableName: String{
+    case Day = "Day"
+    case Reading = "Reading"
+    case Workout = "Workout"
+}
+
 class WorkoutDBAccess{
     
     private let createDayTableSQL: String = """
@@ -22,18 +28,18 @@ class WorkoutDBAccess{
     
     private let createReadingTableSQL: String = """
             CREATE TABLE Reading(
-                pk varchar(32) NOT NULL,
+                primary_key varchar(32) NOT NULL,
                 date Date NOT NULL,
                 type varchar(16) NOT NULL,
                 value REAL NOT NULL,
-                PRIMARY KEY (pk),
+                PRIMARY KEY (primary_key),
             FOREIGN KEY (date) REFERENCES Day(date)
             );
     """
     
     private let createWorkoutTableSQL: String = """
-            CREATE TABLE Workout(
-                pk varchar(32) NOT NULL,
+            CREATE TABLE \(TableName.Workout.rawValue)(
+                primary_key varchar(32) NOT NULL,
                 date Date NOT NULL,
                 workout_number INTEGER NOT NULL,
                 activity varchar(16) NOT NULL,
@@ -56,14 +62,13 @@ class WorkoutDBAccess{
                 keywords TEXT NOT NULL,
                 comments TEXT NOT NULL,
                 last_save Date,
-                PRIMARY KEY (pk),
-                FOREIGN KEY (date) REFERENCES Day(date)
+                PRIMARY KEY (primary_key)
             );
     """
     
     private let createRaceResultTableSQL: String = """
         CREATE TABLE RaceResult(
-            pk varchar(32) NOT NULL,
+            primary_key varchar(32) NOT NULL,
             date Date NOT NULL,
             race_number INTEGER NOT NULL,
             type varchar(16) NOT NULL,
@@ -84,7 +89,7 @@ class WorkoutDBAccess{
             comments TEXT NOT NULL,
             race_report TEXT NOT NULL,
             last_save Date,
-            PRIMARY KEY (pk)
+            PRIMARY KEY (primary_key)
         );
     """
     
@@ -127,10 +132,10 @@ class WorkoutDBAccess{
         return types
     }
     
-    func activities() -> [String]{ return types(forTable: "Workout", andColumn: "activity") }
-    func activityTypes() -> [String]{ return types(forTable: "Workout", andColumn: "activity_type") }
-    func equipmentTypes() -> [String]{ return types(forTable: "Workout", andColumn: "equipment") }
-    func tssMethods() -> [String]{ return types(forTable: "Workout", andColumn: "tss_method") }
+    func activities() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "activity") }
+    func activityTypes() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "activity_type") }
+    func equipmentTypes() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "equipment") }
+    func tssMethods() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "tss_method") }
     func raceTypes() -> [String]{ return types(forTable: "RaceResult", andColumn: "type") }
     func raceBrands() -> [String]{ return types(forTable: "RaceResult", andColumn: "brand") }
     func raceDistances() -> [String]{ return types(forTable: "RaceResult", andColumn: "distance") }
@@ -211,8 +216,8 @@ class WorkoutDBAccess{
             """
         }else{
             sqlString = """
-            INSERT INTO Reading (pk, date, type, value)
-            VALUES ('\(r.pk)','\(df.string(from: r.date))', '\(r.type)', \(r.value))
+            INSERT INTO Reading (primary_key, date, type, value)
+            VALUES ('\(r.primaryKey)','\(df.string(from: r.date))', '\(r.type)', \(r.value))
             """
         }
         let _ = execute(sql: sqlString)
@@ -226,7 +231,7 @@ class WorkoutDBAccess{
         }
         
         let deleteSQL: String = """
-            DELETE FROM Workout
+            DELETE FROM \(TableName.Workout.rawValue)
             WHERE date="\(w.day.iso8601DateString)" AND workout_number=\(w.workoutNumber) AND last_save="\(ISO8601DateFormatter().string(from: lastSave))"
         """
         if execute(sql: deleteSQL){
@@ -240,7 +245,7 @@ class WorkoutDBAccess{
         var sqlString: String = ""
         if exists(workout: w){
             sqlString = """
-            UPDATE Workout
+            UPDATE \(TableName.Workout.rawValue)
             SET
             activity='\(w.activity)',
             activity_type='\(w.activityType)',
@@ -266,10 +271,10 @@ class WorkoutDBAccess{
             """
         }else{
             sqlString = """
-            INSERT INTO Workout
-            (pk, date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save)
+            INSERT INTO \(TableName.Workout.rawValue)
+            (primary_key, date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save)
             VALUES
-            ('\(w.pk)', '\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)", "\(ISO8601DateFormatter().string(from: Date()))")
+            ('\(w.primaryKey)', '\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)", "\(ISO8601DateFormatter().string(from: Date()))")
             """
         }
         let _ = execute(sql: sqlString)
@@ -322,9 +327,9 @@ class WorkoutDBAccess{
         }else{
             sqlString = """
             INSERT INTO RaceResult
-            (pk, date, race_number, type, brand, distance, name, category, overall_position, category_position, swim_seconds, t1_seconds, bike_seconds, t2_seconds, run_seconds, swim_km, bike_km, run_km, comments, race_report, last_save)
+            (primary_key, date, race_number, type, brand, distance, name, category, overall_position, category_position, swim_seconds, t1_seconds, bike_seconds, t2_seconds, run_seconds, swim_km, bike_km, run_km, comments, race_report, last_save)
             VALUES
-            ('\(r.pk)', "\(r.iso8601DateString)", \(r.raceNumber), "\(r.type)", "\(r.brand)", "\(r.distance)", "\(r.name)", "\(r.category)", \(r.overallPosition), \(r.categoryPosition), \(r.swimSeconds), \(r.t1Seconds), \(r.bikeSeconds), \(r.t2Seconds), \(r.runSeconds), \(r.swimKM), \(r.bikeKM), \(r.runKM), "\(r.comments)", "\(r.raceReport)", "\(ISO8601DateFormatter().string(from: Date()))")
+            ('\(r.primaryKey)', "\(r.iso8601DateString)", \(r.raceNumber), "\(r.type)", "\(r.brand)", "\(r.distance)", "\(r.name)", "\(r.category)", \(r.overallPosition), \(r.categoryPosition), \(r.swimSeconds), \(r.t1Seconds), \(r.bikeSeconds), \(r.t2Seconds), \(r.runSeconds), \(r.swimKM), \(r.bikeKM), \(r.runKM), "\(r.comments)", "\(r.raceReport)", "\(ISO8601DateFormatter().string(from: Date()))")
             """
         }
         let _ = execute(sql: sqlString)
@@ -376,7 +381,7 @@ class WorkoutDBAccess{
 
             let wQuery: String = """
                 SELECT date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save
-                FROM Workout
+                FROM \(TableName.Workout.rawValue)
             """
             if sqlite3_prepare_v2(db, wQuery, -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
@@ -527,7 +532,7 @@ class WorkoutDBAccess{
     
     private func exists(workout w: Workout) -> Bool{
         if let db = db(){
-            let qString: String = "SELECT date, workout_number FROM Workout WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)"
+            let qString: String = "SELECT date, workout_number FROM \(TableName.Workout.rawValue) WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)"
             var query: OpaquePointer? = nil
             if sqlite3_prepare_v2(db, qString, -1, &query, nil) == SQLITE_OK{
                 let success = sqlite3_step(query) == SQLITE_ROW

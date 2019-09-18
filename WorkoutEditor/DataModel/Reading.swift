@@ -10,7 +10,7 @@ import Foundation
 
 class Reading: NSObject{
     
-    @objc var pk: String { return "\(day.iso8601DateString)-\(type)" }
+    @objc var primaryKey: String { return "\(day.iso8601DateString)-\(type)" }
     @objc var date: Date{ return day.date }
     @objc var type: String
     @objc var value: Double

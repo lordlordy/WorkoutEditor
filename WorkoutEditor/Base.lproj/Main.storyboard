@@ -2083,7 +2083,7 @@
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <size key="minSize" width="481" height="255"/>
-                                                        <size key="maxSize" width="481" height="10000000"/>
+                                                        <size key="maxSize" width="496" height="10000000"/>
                                                         <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <connections>
                                                             <binding destination="8dw-Xs-kUb" name="value" keyPath="selection.raceReport" id="2RU-GB-t8F"/>

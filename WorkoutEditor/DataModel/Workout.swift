@@ -13,7 +13,7 @@ import Foundation
     private let milesPerKM: Double = 0.621371
     private let feetPerMetre: Double = 3.28084
     
-    @objc var pk: String{
+    @objc var primaryKey: String{
         return "\(day.iso8601DateString)-\(String(workoutNumber))"
     }
     
