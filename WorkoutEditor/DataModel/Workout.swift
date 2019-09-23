@@ -48,6 +48,13 @@ import Foundation
     @objc var keywords: String
     @objc dynamic var comments: String
     @objc var lastSave: Date? = nil
+    @objc var lastSaveString: String{
+        if let d = lastSave{
+            return ISO8601DateFormatter().string(from: d)
+        }else{
+            return ""
+        }
+    }
     
     @objc dynamic var rpeTSS: Int = 0
 

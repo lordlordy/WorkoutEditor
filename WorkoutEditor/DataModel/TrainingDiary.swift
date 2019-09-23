@@ -122,7 +122,7 @@ import Foundation
         let day: Day = Day(date: newDate, type: "Normal", comments: "", trainingDiary: self)
         day.add(readings: [
             Reading(type: "sleep", value: 8.0, parent: day),
-            Reading(type: "sleepQuality", value: 0.75, parent: day),
+            Reading(type: "sleepQualityScore", value: 0.75, parent: day),
             Reading(type: "motivation", value: 5.0, parent: day),
             Reading(type: "fatigue", value: 5.0, parent: day)])
         add(day: day)

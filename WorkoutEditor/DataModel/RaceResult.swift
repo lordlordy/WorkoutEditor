@@ -31,6 +31,13 @@ import Foundation
     @objc var comments: String
     @objc var raceReport: String
     @objc var lastSave: Date? = nil
+    @objc var lastSaveString: String{
+        if let d = lastSave{
+            return ISO8601DateFormatter().string(from: d)
+        }else{
+            return ""
+        }
+    }
     
     @objc var totalKM: Double { return swimKM + bikeKM + runKM}
     @objc var totalSeconds: Int { return swimSeconds +  t1Seconds + bikeSeconds + t2Seconds + runSeconds}

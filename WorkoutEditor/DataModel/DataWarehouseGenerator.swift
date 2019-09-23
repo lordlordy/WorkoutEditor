@@ -138,8 +138,8 @@ class DataWarehouseGenerator{
             var dateSetValuesDict: [String: String] = [:]
             for hrv in hData{
                 dateSetValuesDict[hrv.dString] = """
-                sdnn_off=\(hrv.sdnnOff), sdnn_easy=\(hrv.sdnnEasy), sdnn_hard=\(hrv.sdnnHard),
-                rmssd_off=\(hrv.rmssdOff), rmssd_easy=\(hrv.rmssdEasy), rmssd_hard=\(hrv.rmssdHard)
+                sdnn_off=\(hrv.sdnnOff), sdnn_easy=\(hrv.sdnnEasy), sdnn_hard=\(hrv.sdnnHard), sdnn_mean=\(hrv.sdnnMean), sdnn_std_dev=\(hrv.sdnnStdDev),
+                rmssd_off=\(hrv.rmssdOff), rmssd_easy=\(hrv.rmssdEasy), rmssd_hard=\(hrv.rmssdHard), rmssd_mean=\(hrv.rmssdMean), rmssd_std_dev=\(hrv.rmssdStdDev)
                 """
             }
             performTransaction(db, dateSetValuesDict, t.tableName)
@@ -347,10 +347,11 @@ class DataWarehouseGenerator{
     
     private func createTable(tableName name: String, forWorkoutType type: WorkoutType, firstDate dString: String){
         
-        let createDayTableSQL: String = """
-        CREATE TABLE \(name)(\(tableColumns), PRIMARY KEY (date));
-        """
+        let columnDefinitions: [String] = WarehouseColumn.dayColumns().map({$0.sqlString()})
         
+        let createDayTableSQL: String = """
+        CREATE TABLE \(name)(\(columnDefinitions.joined(separator: ",")));
+        """
         if let db = db(){
             var query: OpaquePointer? = nil
             if sqlite3_prepare_v2(db, createDayTableSQL, -1, &query, nil) == SQLITE_OK{

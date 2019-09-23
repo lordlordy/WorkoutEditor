@@ -39,6 +39,8 @@ class JSONExporter{
             trainingDiaryDictionary["Days"] = daysArray
         }
         
+        print(trainingDiaryDictionary)
+        
         do {
             let data = try JSONSerialization.data(withJSONObject: trainingDiaryDictionary, options: .prettyPrinted)
             let jsonString = NSString.init(data: data, encoding: String.Encoding.utf8.rawValue)

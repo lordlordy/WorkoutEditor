@@ -20,9 +20,13 @@ class Maths{
         var sdnnOff: Double
         var sdnnEasy: Double
         var sdnnHard: Double
+        var sdnnMean: Double
+        var sdnnStdDev: Double
         var rmssdOff: Double
         var rmssdEasy: Double
         var rmssdHard: Double
+        var rmssdMean: Double
+        var rmssdStdDev: Double
     }
     
     func hrvThresholds(orderedValues: [(dString: String, sdnn: Double, rmssd: Double)]) -> [HRVThresholds]{
@@ -48,7 +52,8 @@ class Maths{
             let sEasy = sMean + easySDs * sStDev
             let sOff = sMean + offSDs * sStDev
             
-            result.append(HRVThresholds(dString: d.dString, sdnnOff: sOff, sdnnEasy: sEasy, sdnnHard: sHard, rmssdOff: rOff, rmssdEasy: rEasy, rmssdHard: rHard))
+            result.append(HRVThresholds(dString: d.dString, sdnnOff: sOff, sdnnEasy: sEasy, sdnnHard: sHard, sdnnMean: sMean, sdnnStdDev: sStDev,
+                                        rmssdOff: rOff, rmssdEasy: rEasy, rmssdHard: rHard, rmssdMean: rMean, rmssdStdDev: rStDev))
             
         }
         

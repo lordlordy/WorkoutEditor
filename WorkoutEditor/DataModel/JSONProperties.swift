@@ -11,7 +11,7 @@ import Foundation
 enum WorkoutJSONProperty: String,  CaseIterable{
     case workoutNumber, activity, activityType, equipment, seconds, rpe, tss
     case tssMethod, km, kj, ascentMetres, reps, isRace, cadence, watts
-    case wattsEstimated, heartRate, isBrick, keywords, comments, lastSave
+    case wattsEstimated, heartRate, isBrick, keywords, comments, lastSaveString
 }
 
 enum DayJSONProperty: String, CaseIterable{
@@ -25,5 +25,5 @@ enum ReadingJSONProperty: String, CaseIterable{
 enum RaceResultJSONProperty: String, CaseIterable{
     case raceNumber, type, brand, distance, name, category, overallPosition, categoryPosition
     case swimSeconds, t1Seconds, bikeSeconds, t2Seconds, runSeconds, swimKM, bikeKM, runKM
-    case comments, raceReport, iso8601DateString, lastSave
+    case comments, raceReport, iso8601DateString, lastSaveString
 }

@@ -10,13 +10,13 @@ import Foundation
 
 enum WarehouseColumn: String, CaseIterable{
     
-    case date, year, year_week, year_month, year_quarter, day_of_week, month, week, quarter
+    case date, year, year_week, year_for_week_of_year, year_month, year_quarter, day_of_week, month, week, quarter
     case day_type, fatigue, motivation
     case sleep_seconds, sleep_minutes, sleep_hours, sleep_score, sleep_quality, sleep_quality_score
     case km, miles, tss, rpe, hr, watts, seconds, minutes, hours, ascent_metres, ascent_feet, kj, reps, is_race, brick, watts_estimated, cadence
     case rpe_tss, mph, kph, ctl, atl, tsb, rpe_ctl, rpe_atl, rpe_tsb, monotony, strain, rpe_monotony, rpe_strain, kg, lbs, fat_percentage, resting_hr
     case sdnn, rmssd, kg_recorded, lbs_recorded, fat_percentage_recorded, resting_hr_recorded, sdnn_recorded, rmssd_recorded
-    case sdnn_off, sdnn_easy, sdnn_hard, rmssd_off, rmssd_easy, rmssd_hard
+    case sdnn_off, sdnn_easy, sdnn_hard, sdnn_mean, sdnn_std_dev, rmssd_off, rmssd_easy, rmssd_hard, rmssd_mean, rmssd_std_dev
 
     func sqlType() -> String{
         switch self{
@@ -24,13 +24,13 @@ enum WarehouseColumn: String, CaseIterable{
             return "date PRIMARY KEY"
         case .month, .day_of_week:
             return "varchar(8) NOT NULL"
-        case .year, .year_week, .year_month, .day_type, .year_quarter, .week, .quarter:
+        case .year, .year_week, .year_for_week_of_year, .year_month, .day_type, .year_quarter, .week, .quarter:
             return "varchar(16) NOT NULL"
         case .sleep_quality:
             return "varchar(16) NOT NULL DEFAULT 'Average'"
         case .fatigue, .motivation, .sleep_hours, .km, .miles, .rpe, .hours, .mph, .kph, .ctl, .atl, .tsb, .rpe_ctl, .rpe_atl, .rpe_tsb,
              .monotony, .strain, .rpe_monotony, .rpe_strain, .kg, .lbs, .fat_percentage, .sdnn, .rmssd, .sleep_quality_score, .sleep_score,
-             .sdnn_off, .sdnn_easy, .sdnn_hard, .rmssd_off, .rmssd_easy, .rmssd_hard:
+             .sdnn_off, .sdnn_easy, .sdnn_hard, .sdnn_mean, .sdnn_std_dev, .rmssd_off, .rmssd_easy, .rmssd_hard, .rmssd_mean, .rmssd_std_dev:
             return "REAL DEFAULT 0.0 NOT NULL"
         case .sleep_minutes, .sleep_seconds, .tss, .rpe_tss, .hr, .watts, .seconds, .minutes, .ascent_feet, .ascent_metres, .kj, .reps,
              .cadence, .resting_hr:
@@ -41,12 +41,16 @@ enum WarehouseColumn: String, CaseIterable{
         }
     }
     
+    func sqlString() -> String{
+        return "\(self.rawValue) \(sqlType())"
+    }
+    
     static func dayColumns() -> [WarehouseColumn]{
-        return [.date, .year, .year_week, .year_month, .year_quarter, .day_of_week, .week, .month, .quarter, .day_type, .fatigue, .motivation, .sleep_seconds, .sleep_minutes, .sleep_hours, .sleep_quality,
+        return [.date, .year, .year_week, .year_for_week_of_year, .year_month, .year_quarter, .day_of_week, .week, .month, .quarter, .day_type, .fatigue, .motivation, .sleep_seconds, .sleep_minutes, .sleep_hours, .sleep_quality,
                 .sleep_quality_score, .sleep_score, .km, .miles, .tss, .rpe, .hr, .watts, .seconds, .minutes, .hours, .ascent_metres, .ascent_feet, .kj, .reps, .is_race, .brick,
                 .watts_estimated, .cadence, .rpe_tss, .mph, .kph, .ctl, .atl, .tsb, .rpe_ctl, .rpe_atl, .rpe_tsb, .monotony, .strain, .rpe_monotony, .rpe_strain, .kg, .lbs, .fat_percentage,
                 .resting_hr, .sdnn, .rmssd, .kg_recorded, .lbs_recorded, .fat_percentage_recorded, .resting_hr_recorded, .sdnn_recorded, .rmssd_recorded,
-                .sdnn_off, .sdnn_easy, .sdnn_hard, .rmssd_off, .rmssd_easy, .rmssd_hard]
+                .sdnn_off, .sdnn_easy, .sdnn_hard, .sdnn_mean, .sdnn_std_dev, .rmssd_off, .rmssd_easy, .rmssd_hard, .rmssd_mean, .rmssd_std_dev]
     }
 
     static func interpolatedColumns() -> [WarehouseColumn]{
@@ -65,6 +69,7 @@ enum WarehouseColumn: String, CaseIterable{
         switch self{
         case .date: return "\"\(day.iso8601DateString)\""
         case .year_week: return "\"\(day.date.yearForWeekOfYear)-\(day.date.weekOfYear)\""
+        case .year_for_week_of_year: return "\"\(day.date.yearForWeekOfYear)\""
         case .week: return "\"\(day.date.weekOfYear)\""
         case .year: return "\"\(day.date.year)\""
         case .year_month: return "\"\(day.date.year)-\(day.date.monthAsStringShort)\""
