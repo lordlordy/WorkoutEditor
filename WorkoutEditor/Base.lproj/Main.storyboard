@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -59,8 +60,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="Import..." id="Z5h-hW-Uzc">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Import..." keyEquivalent="i" id="Z5h-hW-Uzc">
                                             <connections>
                                                 <action selector="importJSON:" target="Ady-hI-5gd" id="icR-S4-rLv"/>
                                             </connections>
@@ -69,14 +69,12 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Database" id="Mj5-5f-kG2">
                                                 <items>
-                                                    <menuItem title="Select..." id="Wl9-0C-vJP">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="Select..." keyEquivalent="s" id="Wl9-0C-vJP">
                                                         <connections>
                                                             <action selector="selectDatabase:" target="Ady-hI-5gd" id="C0X-Sh-5cF"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="New..." id="p0u-2l-BWF">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="New..." keyEquivalent="n" id="p0u-2l-BWF">
                                                         <connections>
                                                             <action selector="newDB:" target="Ady-hI-5gd" id="PDU-8R-hcY"/>
                                                         </connections>
@@ -88,22 +86,31 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Data Warehouse" id="DhU-pe-J4H">
                                                 <items>
-                                                    <menuItem title="Select..." id="QkM-E4-pTK">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="Select..." keyEquivalent="S" id="QkM-E4-pTK">
                                                         <connections>
                                                             <action selector="selectDataWarehouse:" target="Ady-hI-5gd" id="HOQ-dL-5vR"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="New..." id="eZB-C3-Ekg">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem isSeparatorItem="YES" id="Eek-F0-U2y"/>
+                                                    <menuItem title="Update" keyEquivalent="u" id="F5h-Pi-fsz">
                                                         <connections>
-                                                            <action selector="newDataWarehouse:" target="Ady-hI-5gd" id="qel-nC-A7A"/>
+                                                            <action selector="updateWarehouse:" target="Ady-hI-5gd" id="OTL-LN-2gO"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Generate" id="ePt-H3-Ks5">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="Rebuild from..." keyEquivalent="r" id="uxR-Sy-Y8B">
+                                                        <connections>
+                                                            <action selector="rebuildWarehouse:" target="Ady-hI-5gd" id="nOg-2E-yeC"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Generate" keyEquivalent="g" id="ePt-H3-Ks5">
                                                         <connections>
                                                             <action selector="generateWarehouse:" target="Ady-hI-5gd" id="ZPL-lE-KHT"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="5Xq-Pm-5Cf"/>
+                                                    <menuItem title="New..." keyEquivalent="N" id="eZB-C3-Ekg">
+                                                        <connections>
+                                                            <action selector="newDataWarehouse:" target="Ady-hI-5gd" id="qel-nC-A7A"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
@@ -113,39 +120,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="test:" target="Ady-hI-5gd" id="8Qv-do-IIg"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                                        <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
-                                            <connections>
-                                                <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Save…" keyEquivalent="s" id="pxx-59-PXV">
-                                            <connections>
-                                                <action selector="saveDocument:" target="Ady-hI-5gd" id="teZ-XB-qJY"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
-                                            <connections>
-                                                <action selector="saveDocumentAs:" target="Ady-hI-5gd" id="mDf-zr-I0C"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Revert to Saved" keyEquivalent="r" id="KaW-ft-85H">
-                                            <connections>
-                                                <action selector="revertDocumentToSaved:" target="Ady-hI-5gd" id="iJ3-Pv-kwq"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
-                                        <menuItem title="Page Setup…" keyEquivalent="P" id="qIS-W8-SiK">
-                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="runPageLayout:" target="Ady-hI-5gd" id="Din-rz-gC5"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Print…" keyEquivalent="p" id="aTl-1u-JFS">
-                                            <connections>
-                                                <action selector="print:" target="Ady-hI-5gd" id="qaZ-4w-aoO"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -740,23 +714,23 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="WorkoutEditor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="489" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="712" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7hU-dt-hTx">
-                                <rect key="frame" x="2" y="1" width="485" height="20"/>
+                                <rect key="frame" x="2" y="1" width="708" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="18" id="jqE-Be-dVC"/>
                                 </constraints>
                             </progressIndicator>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="XuQ-RP-mIn">
-                                <rect key="frame" x="2" y="34" width="485" height="234"/>
+                                <rect key="frame" x="2" y="34" width="708" height="234"/>
                                 <connections>
                                     <segue destination="fUm-Ra-nAH" kind="embed" id="mWn-Hp-Ren"/>
                                 </connections>
                             </containerView>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="F8e-Oa-Gay">
-                                <rect key="frame" x="0.0" y="20" width="489" height="12"/>
+                                <rect key="frame" x="0.0" y="20" width="712" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="EbK-lL-MLA"/>
                                 </constraints>
@@ -772,10 +746,10 @@
                             <constraint firstItem="XuQ-RP-mIn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="2" id="8pJ-hr-XhK"/>
                             <constraint firstItem="7hU-dt-hTx" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="2" id="Fcf-8p-OKh"/>
                             <constraint firstItem="7hU-dt-hTx" firstAttribute="top" secondItem="F8e-Oa-Gay" secondAttribute="bottom" id="G0a-9o-t8m"/>
-                            <constraint firstAttribute="trailing" secondItem="F8e-Oa-Gay" secondAttribute="trailing" constant="2" id="Kd2-aP-hhB"/>
+                            <constraint firstAttribute="trailing" secondItem="F8e-Oa-Gay" secondAttribute="trailing" constant="2" id="LSX-Lw-HbD"/>
+                            <constraint firstAttribute="trailing" secondItem="7hU-dt-hTx" secondAttribute="trailing" constant="2" id="XHN-AC-l6v"/>
                             <constraint firstAttribute="bottom" secondItem="7hU-dt-hTx" secondAttribute="bottom" constant="2" id="dVB-Or-Nwc"/>
                             <constraint firstItem="XuQ-RP-mIn" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="2" id="e4b-hg-ffV"/>
-                            <constraint firstAttribute="trailing" secondItem="7hU-dt-hTx" secondAttribute="trailing" constant="2" id="k17-sQ-yqt"/>
                             <constraint firstItem="F8e-Oa-Gay" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="2" id="rBD-Yl-fMH"/>
                             <constraint firstItem="F8e-Oa-Gay" firstAttribute="top" secondItem="XuQ-RP-mIn" secondAttribute="bottom" constant="2" id="wkY-SQ-G8V"/>
                         </constraints>
@@ -787,7 +761,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8.5" y="592"/>
+            <point key="canvasLocation" x="29" y="592"/>
         </scene>
         <!--Tab View Controller-->
         <scene sceneID="jeA-sH-OO5">
@@ -2029,6 +2003,20 @@
                     <view key="view" id="OVo-2M-9UO">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BeY-9e-mdd">
+                                <rect key="frame" x="32" y="207" width="100" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="ezL-2L-WYQ">
+                                    <font key="font" metaFont="system"/>
+                                    <date key="date" timeIntervalSinceReferenceDate="-595929600">
+                                        <!--1982-02-12 16:00:00 +0000-->
+                                    </date>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                </datePickerCell>
+                            </datePicker>
+                        </subviews>
                     </view>
                 </viewController>
                 <customObject id="cdm-Ku-2zf" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -2097,11 +2085,11 @@
                                                     </textView>
                                                 </subviews>
                                             </clipView>
-                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="TqI-go-1jN">
+                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="TqI-go-1jN">
                                                 <rect key="frame" x="-100" y="-100" width="225" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
-                                            <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2f9-rT-bPJ">
+                                            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2f9-rT-bPJ">
                                                 <rect key="frame" x="481" y="0.0" width="15" height="356"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
@@ -3015,7 +3003,7 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.15287244401168451" horizontal="YES" id="7OJ-PT-QQI">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="7OJ-PT-QQI">
                                     <rect key="frame" x="1" y="358" width="469" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>

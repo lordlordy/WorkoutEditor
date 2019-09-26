@@ -20,7 +20,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var progressField: NSTextField!
     private var mainWindowName: String = ""
     private var selectedDataWarehouseURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "stevenlord.me.uk.SharedTrainingDiary")!.appendingPathComponent("DefaultDataWarehouse.sqlite3")
-    
+        
     var trainingDiary: TrainingDiary{
         return representedObject as! TrainingDiary
     }
@@ -120,6 +120,7 @@ class ViewController: NSViewController {
             mainWindowName = w.title
         }
     }
+    
 
     
     @IBAction func newDB(_ sender: Any){
@@ -155,10 +156,41 @@ class ViewController: NSViewController {
     }
     
     @IBAction func generateWarehouse(_ sender: Any){
-        let generator = DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL)
-        self.progressBar.doubleValue = 0.0
-        DispatchQueue.global(qos: .userInitiated).async {
-            generator.generate(progressUpdater: self.progressUpdater)
+        let msg = NSAlert()
+        msg.addButton(withTitle: "Proceed")
+        msg.addButton(withTitle: "Cancel")
+        msg.messageText = "Rebuild Data Warehouse"
+        msg.informativeText = "This will rebuild the Data Warehouse (\(selectedDataWarehouseURL.lastPathComponent)) from scratch and could take some time. Do you want to proceed?"
+        
+        if msg.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn{
+            let generator = DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL)
+            self.progressBar.doubleValue = 0.0
+            DispatchQueue.global(qos: .userInitiated).async {
+                generator.generate(progressUpdater: self.progressUpdater)
+            }
+        }
+    }
+    
+    @IBAction func updateWarehouse(_ sender: Any){
+        
+    }
+    
+    @IBAction func rebuildWarehouse(_ sender: Any){
+        let latestDateStr = DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL).latestDateString()
+        let msg = NSAlert()
+        msg.addButton(withTitle: "Rebuild")
+        msg.addButton(withTitle: "Cancel")
+        msg.messageText = "Select date to rebuild from"
+        msg.informativeText = "Warehouse data will be replaced on and after this date. Warehouse data to \(latestDateStr)"
+        let dp = NSDatePicker(frame:NSRect(x:0, y:0, width: 125, height: 26))
+        dp.datePickerElements = .yearMonthDay
+        dp.dateValue = Date()
+        msg.accessoryView = dp
+        
+        if msg.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn{
+            print(dp.dateValue)
+        }else{
+            print("Rebuilding data warehouse from date cancelled")
         }
     }
     

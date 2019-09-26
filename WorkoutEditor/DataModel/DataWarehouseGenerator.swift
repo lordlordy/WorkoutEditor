@@ -41,6 +41,23 @@ class DataWarehouseGenerator{
 
     }
     
+    func latestDateString() -> String{
+        guard let db = db() else{
+            print("unable to calculate HRV thresholds as no DB connection")
+            return ""
+        }
+
+        let dateQueryStr: String = "SELECT max(date) FROM day_All_All_All"
+        var query: OpaquePointer? = nil
+        var str: String = ""
+        if sqlite3_prepare_v2(db, dateQueryStr, -1, &query, nil) == SQLITE_OK{
+            if sqlite3_step(query) == SQLITE_ROW{
+                str = String(cString: sqlite3_column_text(query, 0))
+            }
+        }
+        sqlite3_finalize(query)
+        return str
+    }
 
     func generate(progressUpdater updater: ((Double, String) -> Void)?){
         let start: Date = Date()
