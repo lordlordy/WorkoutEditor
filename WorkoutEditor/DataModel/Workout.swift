@@ -61,7 +61,8 @@ import Foundation
     
     var unsavedChanges: Bool = false
     
-    var miles: Double{ return km * milesPerKM }
+    // nb to 2 dp
+    var miles: Double{ return round(km * milesPerKM * 100) / 100 }
     var ascentFeet: Int { return Int(Double(ascentMetres) * feetPerMetre)}
 
     

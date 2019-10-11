@@ -172,7 +172,11 @@ class ViewController: NSViewController {
     }
     
     @IBAction func updateWarehouse(_ sender: Any){
-        
+        let generator = DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL)
+        self.progressBar.doubleValue = 0.0
+        DispatchQueue.global(qos: .userInitiated).async {
+            generator.update(progressUpdater: self.progressUpdater)
+        }
     }
     
     @IBAction func rebuildWarehouse(_ sender: Any){
@@ -188,7 +192,12 @@ class ViewController: NSViewController {
         msg.accessoryView = dp
         
         if msg.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn{
-            print(dp.dateValue)
+            let generator = DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL)
+            self.progressBar.doubleValue = 0.0
+            let fromDate: Date = dp.dateValue
+            DispatchQueue.global(qos: .userInitiated).async {
+                generator.rebuild(fromDate: fromDate, progressUpdater: self.progressUpdater)
+            }
         }else{
             print("Rebuilding data warehouse from date cancelled")
         }

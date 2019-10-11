@@ -81,11 +81,23 @@ import Foundation
         weeklyNodes = nil
     }
 
-    func ascendingOrderedDays() -> [Day]{
+    func ascendingOrderedDays(fromDate date: Date?) -> [Day]{
+        if let d = date{
+            return dayCache.values.filter { (day) -> Bool in
+                let comparison: ComparisonResult = Calendar.current.compare(d, to: day.date, toGranularity: .day)
+                return comparison == .orderedSame || comparison == .orderedAscending
+            }.sorted(by: {$0.date < $1.date})
+        }
         return dayCache.values.sorted(by: {$0.date < $1.date})
     }
     
-    func descendingOrderedDays() -> [Day]{
+    func descendingOrderedDays(fromDate date: Date?) -> [Day]{
+        if let d = date{
+            return dayCache.values.filter { (day) -> Bool in
+                let comparison: ComparisonResult = Calendar.current.compare(d, to: day.date, toGranularity: .day)
+                return comparison == .orderedSame || comparison == .orderedAscending
+            }.sorted(by: {$0.date > $1.date})
+        }
         return dayCache.values.sorted(by: {$0.date > $1.date})
     }
     
@@ -114,7 +126,7 @@ import Foundation
     }
     
     func defaultNewDay() -> Day{
-        let days: [Day] = descendingOrderedDays()
+        let days: [Day] = descendingOrderedDays(fromDate: nil)
         var newDate: Date = Date()
         if days.count > 0{
             newDate = Calendar.current.date(byAdding: DateComponents(day: 1), to: days[0].date)!
@@ -214,7 +226,7 @@ extension TrainingDiary{
     private func createMonthlyNodes() -> [PeriodNode]{
         var monthYearNodes: [PeriodNodeImplementation] = []
         var yearNodes: [String: PeriodNodeImplementation] = [:]
-        for d in descendingOrderedDays(){
+        for d in descendingOrderedDays(fromDate: nil){
             let year: String = String(d.date.year)
             let month: String = d.date.monthAsString
             let quarter: String = "Q\(d.date.quarter)"
@@ -251,7 +263,7 @@ extension TrainingDiary{
     private func createWeeklyNodes() -> [PeriodNode]{
         var weekYearNodes: [PeriodNodeImplementation] = []
         var yearNodes: [String: PeriodNodeImplementation] = [:]
-        for d in descendingOrderedDays(){
+        for d in descendingOrderedDays(fromDate: nil){
             let year: String = String(d.date.yearForWeekOfYear)
             let week: String = "Wk-\(d.date.weekOfYear)"
             var yearNode: PeriodNodeImplementation
