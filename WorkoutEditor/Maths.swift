@@ -10,7 +10,7 @@ import Foundation
 
 class Maths{
     
-    var hrvThresholdDays: Int = 91
+    static var hrvThresholdDays: Int = 91
     var hrvOffPercentile: Double = 0.05
     var hrvEasyPercentile: Double = 0.25
     var hrvHardPercentile: Double = 0.75
@@ -31,8 +31,8 @@ class Maths{
     
     func hrvThresholds(orderedValues: [(dString: String, sdnn: Double, rmssd: Double)]) -> [HRVThresholds]{
         var result: [HRVThresholds] = []
-        let sQ: RollingSumQueue = RollingSumQueue(size: hrvThresholdDays)
-        let rQ: RollingSumQueue = RollingSumQueue(size: hrvThresholdDays)
+        let sQ: RollingSumQueue = RollingSumQueue(size: Maths.hrvThresholdDays)
+        let rQ: RollingSumQueue = RollingSumQueue(size: Maths.hrvThresholdDays)
 
         let offSDs = normalCDFInverse(hrvOffPercentile)
         let easySDs = normalCDFInverse(hrvEasyPercentile)
@@ -90,6 +90,9 @@ class Maths{
         
         }
         if item.0 > 0{
+            zeroBounds.append((item.0, values.count))
+        }else if foundFirstNonZero && zeroBounds.count == 0{
+            // this means we only have a single non zero value
             zeroBounds.append((item.0, values.count))
         }
         

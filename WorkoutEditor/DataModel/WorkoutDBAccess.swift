@@ -186,7 +186,6 @@ class WorkoutDBAccess{
                     SET type='\(d.type)', comments="\(d.comments)"
                     WHERE date='\(df.string(from: d.date))'
                 """
-            print(sqlString)
         }else{
             sqlString = """
                     INSERT INTO Day (date, type, comments)
@@ -265,7 +264,7 @@ class WorkoutDBAccess{
             heart_rate=\(w.heartRate),
             is_brick=\(w.isBrick),
             keywords="\(w.keywords)",
-            comments="\(w.comments)"
+            comments="\(w.comments)",
             last_save="\(ISO8601DateFormatter().string(from: Date()))"
             WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)
             """
@@ -278,7 +277,6 @@ class WorkoutDBAccess{
             """
         }
         let _ = execute(sql: sqlString)
-
     }
     
     func delete(raceResult rr: RaceResult){
@@ -324,7 +322,6 @@ class WorkoutDBAccess{
             last_save="\(ISO8601DateFormatter().string(from: Date()))"
             WHERE date='\(r.iso8601DateString)' and race_number=\(r.raceNumber)
             """
-            print(sqlString)
         }else{
             sqlString = """
             INSERT INTO RaceResult

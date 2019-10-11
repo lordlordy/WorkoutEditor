@@ -108,4 +108,14 @@ extension Date{
         return dc.yearForWeekOfYear!
     }
     
+    func tomorrow() -> Date{
+        let dc: DateComponents = DateComponents(day: 1)
+        return Calendar.current.date(byAdding: dc, to: self)!
+    }
+    
+    func yesterday() -> Date{
+        let dc: DateComponents = DateComponents(day: -1)
+        return Calendar.current.date(byAdding: dc, to: self)!
+    }
+    
 }

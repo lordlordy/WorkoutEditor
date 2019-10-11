@@ -26,10 +26,24 @@ class RaceResultsViewController: NSViewController {
     
     @IBAction func saveRaceResult(_ sender: Any) {
         if let rr = raceResultsAC.selectedObjects as? [RaceResult]{
-            if rr.count > 0{
-                WorkoutDBAccess.shared.save(raceResult: rr[0])
-            }else{
-                print("no race result selected")
+            for r in rr{
+                WorkoutDBAccess.shared.save(raceResult: r)
+            }
+        }
+    }
+    
+    @IBAction func exportSelection(_ sender: Any){
+        if let url = OpenAndSaveDialogues().saveFilePath(suggestedFileName: "RaceResults", allowFileTypes: ["json"], directory: nil){
+            
+            if let raceResults = raceResultsAC.selectedObjects as? [RaceResult]{
+                  if let jsonString = JSONExporter().createJSON(forDays: [], raceResults: raceResults){
+                      do{
+                          try jsonString.write(to: url, atomically: true, encoding: String.Encoding.utf8.rawValue)
+                      }catch{
+                          print("Unable to save JSON")
+                          print(error)
+                      }
+                  }
             }
         }
     }

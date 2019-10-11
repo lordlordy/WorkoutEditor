@@ -13,7 +13,6 @@ class ReadingsArrayController: NSArrayController {
     var day: Day?
 
     override func newObject() -> Any {
-        print("New object")
         return day!.defaultReading()        
     }
     
