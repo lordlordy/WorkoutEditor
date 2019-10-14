@@ -44,6 +44,34 @@ class DataWarehouseGenerator{
 
     }
     
+    func populateTrainingDiaryWithTSB(fromDate date: String?=nil){
+        
+        let allData = tsb(fromTable: "day_All_All_All", fromDate: date)
+        let swimData = tsb(fromTable: "day_Swim_All_All", fromDate: date)
+        let bikeData = tsb(fromTable: "day_Bike_All_All", fromDate: date)
+        let runData = tsb(fromTable: "day_Run_All_All", fromDate: date)
+        
+        var days: [Day] = [Day](trainingDiary.dayCache.values)
+        if let d = date{
+            days = days.filter({$0.iso8601DateString >= d})
+        }
+        
+        for d in days{
+            let total: (ctl: Double, atl: Double) = allData[d.iso8601DateString] ?? (0.0, 0.0)
+            let swim: (ctl: Double, atl: Double) = swimData[d.iso8601DateString] ?? (0.0, 0.0)
+            let bike: (ctl: Double, atl: Double) = bikeData[d.iso8601DateString] ?? (0.0, 0.0)
+            let run: (ctl: Double, atl: Double) = runData[d.iso8601DateString] ?? (0.0, 0.0)
+            d.ctl = total.ctl
+            d.atl = total.atl
+            d.ctlSwim = swim.ctl
+            d.atlSwim = swim.atl
+            d.ctlBike = bike.ctl
+            d.atlBike = bike.atl
+            d.ctlRun = run.ctl
+            d.atlRun = run.atl
+        }
+    }
+    
     func latestDateString() -> String{
         guard let db = db() else{
             print("unable to calculate HRV thresholds as no DB connection")
@@ -77,6 +105,9 @@ class DataWarehouseGenerator{
         
         //update from the next day
         generate(fromDate: lastDate.tomorrow(), progressUpdater: updater)
+        let df: DateFormatter = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        populateTrainingDiaryWithTSB(fromDate: df.string(from: lastDate.tomorrow()))
     }
     
     func rebuild(fromDate date: Date, progressUpdater updater: ((Double, String) -> Void)?){
@@ -94,7 +125,9 @@ class DataWarehouseGenerator{
             let _: Bool = execute(sql: sql)
         }
         generate(fromDate: date, progressUpdater: updater)
-
+        let df: DateFormatter = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        populateTrainingDiaryWithTSB(fromDate: df.string(from: date))
     }
     
     private func generate(fromDate date: Date?, progressUpdater updater: ((Double, String) -> Void)?){
@@ -460,6 +493,28 @@ class DataWarehouseGenerator{
             sqlite3_finalize(q)
         }
         
+        return result
+    }
+    
+    private func tsb(fromTable table: String, fromDate date: String?=nil) -> [String: (ctl: Double, atl: Double)]{
+        guard let db = db() else{
+            return [:]
+        }
+        var sql: String = "SELECT date, ctl, atl FROM \(table)"
+        if let d = date{
+            sql = sql + " WHERE date>='\(d)'"
+        }
+        var query: OpaquePointer? = nil
+        var result: [String: (ctl: Double, atl: Double)] = [:]
+        if sqlite3_prepare_v2(db, sql, -1, &query, nil) == SQLITE_OK{
+            while sqlite3_step(query) == SQLITE_ROW{
+                let date: String = String(cString: sqlite3_column_text(query, 0))
+                let ctl: Double = sqlite3_column_double(query, 1)
+                let atl: Double = sqlite3_column_double(query, 2)
+                result[date] = (ctl: ctl, atl: atl)
+            }
+        }
+        sqlite3_finalize(query)
         return result
     }
     

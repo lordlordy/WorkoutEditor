@@ -33,6 +33,21 @@ import Foundation
     var runKM: Double { return workouts.filter({$0.activity == "Run"}).reduce(0.0, {$0 + $1.km})}
     var totalHours: Double { return Double(workouts.reduce(0, {$0 + $1.seconds}))/3600.0}
     
+    @objc var ctl: Double = 0.0
+    @objc var atl: Double = 0.0
+    @objc var tsb: Double{ return ctl - atl }
+    
+    @objc var ctlSwim: Double = 0.0
+    @objc var atlSwim: Double = 0.0
+    @objc var tsbSwim: Double{ return ctlSwim - atlSwim }
+    
+    @objc var ctlBike: Double = 0.0
+    @objc var atlBike: Double = 0.0
+    @objc var tsbBike: Double{ return ctlBike - atlBike }
+    
+    @objc var ctlRun: Double = 0.0
+    @objc var atlRun: Double = 0.0
+    @objc var tsbRun: Double{ return ctlRun - atlRun }
     
     @objc var iso8601DateString: String{
         let df: DateFormatter = DateFormatter()

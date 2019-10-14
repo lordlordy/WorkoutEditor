@@ -65,6 +65,21 @@ import Foundation
     var miles: Double{ return round(km * milesPerKM * 100) / 100 }
     var ascentFeet: Int { return Int(Double(ascentMetres) * feetPerMetre)}
 
+    @objc var ctl: Double = 0.0
+    @objc var atl: Double = 0.0
+    @objc var tsb: Double{ return ctl - atl }
+    
+    @objc var ctlSwim: Double = 0.0
+    @objc var atlSwim: Double = 0.0
+    @objc var tsbSwim: Double{ return ctlSwim - atlSwim }
+    
+    @objc var ctlBike: Double = 0.0
+    @objc var atlBike: Double = 0.0
+    @objc var tsbBike: Double{ return ctlBike - atlBike }
+    
+    @objc var ctlRun: Double = 0.0
+    @objc var atlRun: Double = 0.0
+    @objc var tsbRun: Double{ return ctlRun - atlRun }
     
     init(day: Day, workout_number: Int, activity: String, activity_type: String, equipment: String, seconds: Int, rpe: Double, tss: Int, tss_method: String, km: Double, kj: Int, ascent_metres: Int, reps: Int, is_race: Bool, cadence:Int, watts: Int, watts_estimated: Bool, heart_rate: Int, is_brick: Bool, keywords: String, comments: String){
         self.day = day
@@ -119,6 +134,7 @@ import Foundation
 }
 
 extension Workout: PeriodNode{
+
     var name: String { return "\(activity):\(activityType):\(equipment)" }
     var children: [PeriodNode] { return [] }
     var childCount: Int { return 0 }

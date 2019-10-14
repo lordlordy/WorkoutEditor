@@ -37,7 +37,7 @@ import Foundation
 
     @objc var raceResults: [RaceResult] = []
     
-    private var dayCache: [String:Day] = [:]
+    var dayCache: [String:Day] = [:]
     private var monthlyNodes: [PeriodNode]?
     private var weeklyNodes: [PeriodNode]?
     var monthly: Bool = true
@@ -47,6 +47,39 @@ import Foundation
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter
     }
+    
+    var ctl: Double{ return latestPeriod()?.ctl ?? 0.0}
+    var atl: Double{ return latestPeriod()?.atl ?? 0.0}
+    var tsb: Double{ return ctl - atl }
+    
+    var ctlSwim: Double{ return latestPeriod()?.ctlSwim ?? 0.0}
+    var atlSwim: Double{ return latestPeriod()?.atlSwim ?? 0.0}
+    var tsbSwim: Double{ return ctlSwim - atlSwim }
+    
+    var ctlBike: Double{ return latestPeriod()?.ctlBike ?? 0.0}
+    var atlBike: Double{ return latestPeriod()?.atlBike ?? 0.0}
+    var tsbBike: Double{ return ctlBike - atlBike }
+    
+    var ctlRun: Double{ return latestPeriod()?.ctlRun ?? 0.0}
+    var atlRun: Double{ return latestPeriod()?.atlRun ?? 0.0}
+    var tsbRun: Double{ return ctlRun - atlRun }
+    
+//    func populate(withTSB tsb: [String: [String: (ctl: Double, atl: Double)]]){
+//        for d in dayCache.values{
+//            let total: (ctl: Double, atl: Double) = tsb["All"]?[d.iso8601DateString] ?? (0.0, 0.0)
+//            let swim: (ctl: Double, atl: Double) = tsb["Swim"]?[d.iso8601DateString] ?? (0.0, 0.0)
+//            let bike: (ctl: Double, atl: Double) = tsb["Bike"]?[d.iso8601DateString] ?? (0.0, 0.0)
+//            let run: (ctl: Double, atl: Double) = tsb["Run"]?[d.iso8601DateString] ?? (0.0, 0.0)
+//            d.ctl = total.ctl
+//            d.atl = total.atl
+//            d.ctlSwim = swim.ctl
+//            d.atlSwim = swim.atl
+//            d.ctlBike = bike.ctl
+//            d.atlBike = bike.atl
+//            d.ctlRun = run.ctl
+//            d.atlRun = run.atl
+//        }
+//    }
 
     func setNodesForRebuild(){
         monthlyNodes = nil
@@ -214,6 +247,17 @@ extension TrainingDiary: PeriodNode{
             result = result.union(c.days)
         }
         return result
+    }
+    
+
+    
+    private func latestPeriod() -> PeriodNode?{
+        let sortedNodes = children.sorted(by: {$0.toDate > $1.toDate})
+        if sortedNodes.count > 0{
+            return sortedNodes[0]
+        }else{
+            return nil
+        }
     }
 
     
@@ -412,6 +456,32 @@ extension TrainingDiary{
             }
             return result
         }
+        
+        var ctl: Double{ return latestPeriod()?.ctl ?? 0.0}
+        var atl: Double{ return latestPeriod()?.atl ?? 0.0}
+        var tsb: Double{ return ctl - atl }
+        
+        var ctlSwim: Double{ return latestPeriod()?.ctlSwim ?? 0.0}
+        var atlSwim: Double{ return latestPeriod()?.atlSwim ?? 0.0}
+        var tsbSwim: Double{ return ctlSwim - atlSwim }
+        
+        var ctlBike: Double{ return latestPeriod()?.ctlBike ?? 0.0}
+        var atlBike: Double{ return latestPeriod()?.atlBike ?? 0.0}
+        var tsbBike: Double{ return ctlBike - atlBike }
+        
+        var ctlRun: Double{ return latestPeriod()?.ctlRun ?? 0.0}
+        var atlRun: Double{ return latestPeriod()?.atlRun ?? 0.0}
+        var tsbRun: Double{ return ctlRun - atlRun }
+        
+        private func latestPeriod() -> PeriodNode?{
+            let sortedNodes = children.sorted(by: {$0.toDate > $1.toDate})
+            if sortedNodes.count > 0{
+                return sortedNodes[0]
+            }else{
+                return nil
+            }
+        }
+        
     }
 
 }

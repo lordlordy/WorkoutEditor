@@ -40,8 +40,12 @@ class NumberToTimeFormatter: ValueTransformer {
         guard let type = value as? NSString else { return nil }
         let myString: String = type as String
         let b = myString.split(separator: ":") as [NSString]
-        let total = b[0].integerValue*3600 + b[1].integerValue*60 + b[2].integerValue
-        return NSNumber(value: total)
+        if b.count > 2{
+            let total = b[0].integerValue*3600 + b[1].integerValue*60 + b[2].integerValue
+            return NSNumber(value: total)
+        }else{
+            return 0.0
+        }
     }
     
 }

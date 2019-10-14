@@ -37,7 +37,8 @@ class ViewController: NSViewController {
         }
         
         representedObject = WorkoutDBAccess.shared.createTrainingDiary()
-
+        
+        DataWarehouseGenerator(trainingDiary: trainingDiary, dbURL: selectedDataWarehouseURL).populateTrainingDiaryWithTSB()
     }
     
     required init?(coder: NSCoder) {

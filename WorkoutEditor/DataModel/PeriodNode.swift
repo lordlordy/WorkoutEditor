@@ -42,4 +42,19 @@ import Foundation
     @objc var unsavedChanges:   Bool        { get }
     @objc var days:             Set<Day>    { get }
     
+    
+    // Training Stress Balance values
+    @objc var ctl:              Double      { get }
+    @objc var atl:              Double      { get }
+    @objc var tsb:              Double      { get }
+    @objc var ctlSwim:          Double      { get }
+    @objc var atlSwim:          Double      { get }
+    @objc var tsbSwim:          Double      { get }
+    @objc var ctlBike:          Double      { get }
+    @objc var atlBike:          Double      { get }
+    @objc var tsbBike:          Double      { get }
+    @objc var ctlRun:           Double      { get }
+    @objc var atlRun:           Double      { get }
+    @objc var tsbRun:           Double      { get }
+
 }
