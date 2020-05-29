@@ -550,12 +550,14 @@ class DataWarehouseGenerator{
                 if sqlite3_step(query) == SQLITE_DONE{
                     //table created add to Tables table
                     sqlite3_finalize(query)
-
+                    
+                    let equipmentString: String = (type.equipment ?? "All").replacingOccurrences(of: " ", with: "")
+                    
                     let sql: String = """
                         INSERT INTO Tables
                         (period, activity, activity_type, equipment, table_name, first_date)
                         VALUES
-                        ("day", "\(type.activity ?? "All")", "\(type.activityType ?? "All")", "\(type.equipment ?? "All")", "\(name)", "\(dString)")
+                        ("day", "\(type.activity ?? "All")", "\(type.activityType ?? "All")", "\(equipmentString)", "\(name)", "\(dString)")
                     """
                     var q: OpaquePointer? = nil
                     if sqlite3_prepare(db, sql, -1, &q, nil) == SQLITE_OK{

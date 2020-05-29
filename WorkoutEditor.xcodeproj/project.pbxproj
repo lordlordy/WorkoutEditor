@@ -20,6 +20,40 @@
 		733A6E4B232A6CBD001087E9 /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4A232A6CBD001087E9 /* WorkoutType.swift */; };
 		733A6E4D232A8F33001087E9 /* WarehouseColumns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */; };
 		733A6E4F232A93B9001087E9 /* SleepQualityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */; };
+		7361236023573096002250AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800362319359E00E33AA0 /* ViewController.swift */; };
+		7361236123573096002250AD /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC996E2327D63F00FE941A /* Date+Extension.swift */; };
+		7361236223573096002250AD /* SleepQualityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */; };
+		7361236323573096002250AD /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DEF232BDEC2009DBADF /* Queue.swift */; };
+		7361236423573096002250AD /* JSONImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D5438D23267E3D0016AE1E /* JSONImporter.swift */; };
+		7361236523573096002250AD /* WarehouseColumns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */; };
+		7361236623573096002250AD /* JSONProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF5232F86C2009DBADF /* JSONProperties.swift */; };
+		7361236723573096002250AD /* OpenAndSaveDialogues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D54389232671470016AE1E /* OpenAndSaveDialogues.swift */; };
+		7361236823573096002250AD /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DED232BDEA5009DBADF /* LinkedList.swift */; };
+		7361236923573096002250AD /* WorkoutDBAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800652319371C00E33AA0 /* WorkoutDBAccess.swift */; };
+		7361236A23573096002250AD /* WorkoutArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC997E2329770C00FE941A /* WorkoutArrayController.swift */; };
+		7361236B23573096002250AD /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC9979232906C800FE941A /* DayViewController.swift */; };
+		7361236C23573096002250AD /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E4A232A6CBD001087E9 /* WorkoutType.swift */; };
+		7361236D23573096002250AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800342319359E00E33AA0 /* AppDelegate.swift */; };
+		7361236E23573096002250AD /* JSONExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF7232F87D2009DBADF /* JSONExporter.swift */; };
+		7361236F23573096002250AD /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006923197CFE00E33AA0 /* Day.swift */; };
+		7361237023573096002250AD /* RaceResultsArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145E01232FE709009DBADF /* RaceResultsArrayController.swift */; };
+		7361237123573096002250AD /* YearsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC99732327DEB300FE941A /* YearsViewController.swift */; };
+		7361237223573096002250AD /* ReadingsArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC997C232948AA00FE941A /* ReadingsArrayController.swift */; };
+		7361237323573096002250AD /* RaceResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF9232FA101009DBADF /* RaceResult.swift */; };
+		7361237423573096002250AD /* RollingSumQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF1232BDEEB009DBADF /* RollingSumQueue.swift */; };
+		7361237523573096002250AD /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006723197CB500E33AA0 /* Reading.swift */; };
+		7361237623573096002250AD /* NumberToTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC99752328109E00FE941A /* NumberToTimeFormatter.swift */; };
+		7361237723573096002250AD /* Maths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF3232BDF6A009DBADF /* Maths.swift */; };
+		7361237823573096002250AD /* TrainingDiary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC996A2327B96200FE941A /* TrainingDiary.swift */; };
+		7361237923573096002250AD /* PeriodNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC996C2327CC0500FE941A /* PeriodNode.swift */; };
+		7361237A23573096002250AD /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378006B231988A200E33AA0 /* Workout.swift */; };
+		7361237B23573096002250AD /* RaceResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DFD232FA55C009DBADF /* RaceResultsViewController.swift */; };
+		7361237C23573096002250AD /* DataWarehouseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A6E48232A639C001087E9 /* DataWarehouseGenerator.swift */; };
+		7361237F23573096002250AD /* create_db.py in Resources */ = {isa = PBXBuildFile; fileRef = 737800612319368300E33AA0 /* create_db.py */; };
+		7361238023573096002250AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 737800382319359F00E33AA0 /* Assets.xcassets */; };
+		7361238123573096002250AD /* Day.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 73EC9977232904E500FE941A /* Day.storyboard */; };
+		7361238223573096002250AD /* populate_db_from_json.py in Resources */ = {isa = PBXBuildFile; fileRef = 737800602319368300E33AA0 /* populate_db_from_json.py */; };
+		7361238323573096002250AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7378003A2319359F00E33AA0 /* Main.storyboard */; };
 		737800352319359E00E33AA0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800342319359E00E33AA0 /* AppDelegate.swift */; };
 		737800372319359E00E33AA0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737800362319359E00E33AA0 /* ViewController.swift */; };
 		737800392319359F00E33AA0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 737800382319359F00E33AA0 /* Assets.xcassets */; };
@@ -76,6 +110,8 @@
 		733A6E4A232A6CBD001087E9 /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
 		733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarehouseColumns.swift; sourceTree = "<group>"; };
 		733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepQualityMapper.swift; sourceTree = "<group>"; };
+		7361238723573096002250AD /* WorkoutEditor Release.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WorkoutEditor Release.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7361238823573096002250AD /* WorkoutEditor copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "WorkoutEditor copy-Info.plist"; path = "/Users/stevenlord/Development/swift/WorkoutEditor/WorkoutEditor copy-Info.plist"; sourceTree = "<absolute>"; };
 		737800312319359E00E33AA0 /* WorkoutEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		737800342319359E00E33AA0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		737800362319359E00E33AA0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +145,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7361237D23573096002250AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7378002E2319359E00E33AA0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -142,6 +185,7 @@
 				737800462319359F00E33AA0 /* WorkoutEditorTests */,
 				737800512319359F00E33AA0 /* WorkoutEditorUITests */,
 				737800322319359E00E33AA0 /* Products */,
+				7361238823573096002250AD /* WorkoutEditor copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,6 +195,7 @@
 				737800312319359E00E33AA0 /* WorkoutEditor.app */,
 				737800432319359F00E33AA0 /* WorkoutEditorTests.xctest */,
 				7378004E2319359F00E33AA0 /* WorkoutEditorUITests.xctest */,
+				7361238723573096002250AD /* WorkoutEditor Release.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -241,6 +286,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7361235E23573096002250AD /* WorkoutEditor Release */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7361238423573096002250AD /* Build configuration list for PBXNativeTarget "WorkoutEditor Release" */;
+			buildPhases = (
+				7361235F23573096002250AD /* Sources */,
+				7361237D23573096002250AD /* Frameworks */,
+				7361237E23573096002250AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "WorkoutEditor Release";
+			productName = WorkoutEditor;
+			productReference = 7361238723573096002250AD /* WorkoutEditor Release.app */;
+			productType = "com.apple.product-type.application";
+		};
 		737800302319359E00E33AA0 /* WorkoutEditor */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 737800572319359F00E33AA0 /* Build configuration list for PBXNativeTarget "WorkoutEditor" */;
@@ -341,11 +403,24 @@
 				737800302319359E00E33AA0 /* WorkoutEditor */,
 				737800422319359F00E33AA0 /* WorkoutEditorTests */,
 				7378004D2319359F00E33AA0 /* WorkoutEditorUITests */,
+				7361235E23573096002250AD /* WorkoutEditor Release */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7361237E23573096002250AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7361237F23573096002250AD /* create_db.py in Resources */,
+				7361238023573096002250AD /* Assets.xcassets in Resources */,
+				7361238123573096002250AD /* Day.storyboard in Resources */,
+				7361238223573096002250AD /* populate_db_from_json.py in Resources */,
+				7361238323573096002250AD /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7378002F2319359E00E33AA0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -375,6 +450,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7361235F23573096002250AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7361236023573096002250AD /* ViewController.swift in Sources */,
+				7361236123573096002250AD /* Date+Extension.swift in Sources */,
+				7361236223573096002250AD /* SleepQualityMapper.swift in Sources */,
+				7361236323573096002250AD /* Queue.swift in Sources */,
+				7361236423573096002250AD /* JSONImporter.swift in Sources */,
+				7361236523573096002250AD /* WarehouseColumns.swift in Sources */,
+				7361236623573096002250AD /* JSONProperties.swift in Sources */,
+				7361236723573096002250AD /* OpenAndSaveDialogues.swift in Sources */,
+				7361236823573096002250AD /* LinkedList.swift in Sources */,
+				7361236923573096002250AD /* WorkoutDBAccess.swift in Sources */,
+				7361236A23573096002250AD /* WorkoutArrayController.swift in Sources */,
+				7361236B23573096002250AD /* DayViewController.swift in Sources */,
+				7361236C23573096002250AD /* WorkoutType.swift in Sources */,
+				7361236D23573096002250AD /* AppDelegate.swift in Sources */,
+				7361236E23573096002250AD /* JSONExporter.swift in Sources */,
+				7361236F23573096002250AD /* Day.swift in Sources */,
+				7361237023573096002250AD /* RaceResultsArrayController.swift in Sources */,
+				7361237123573096002250AD /* YearsViewController.swift in Sources */,
+				7361237223573096002250AD /* ReadingsArrayController.swift in Sources */,
+				7361237323573096002250AD /* RaceResult.swift in Sources */,
+				7361237423573096002250AD /* RollingSumQueue.swift in Sources */,
+				7361237523573096002250AD /* Reading.swift in Sources */,
+				7361237623573096002250AD /* NumberToTimeFormatter.swift in Sources */,
+				7361237723573096002250AD /* Maths.swift in Sources */,
+				7361237823573096002250AD /* TrainingDiary.swift in Sources */,
+				7361237923573096002250AD /* PeriodNode.swift in Sources */,
+				7361237A23573096002250AD /* Workout.swift in Sources */,
+				7361237B23573096002250AD /* RaceResultsViewController.swift in Sources */,
+				7361237C23573096002250AD /* DataWarehouseGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7378002D2319359E00E33AA0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -454,6 +565,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7361238523573096002250AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WorkoutEditor/WorkoutEditor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "WorkoutEditor copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.me.stevenlord.WorkoutEditor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7361238623573096002250AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WorkoutEditor/WorkoutEditor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "WorkoutEditor copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.me.stevenlord.WorkoutEditor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		737800552319359F00E33AA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -686,6 +833,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7361238423573096002250AD /* Build configuration list for PBXNativeTarget "WorkoutEditor Release" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7361238523573096002250AD /* Debug */,
+				7361238623573096002250AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7378002C2319359E00E33AA0 /* Build configuration list for PBXProject "WorkoutEditor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

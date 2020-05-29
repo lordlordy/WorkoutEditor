@@ -4,10 +4,38 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>WorkoutEditor.xcscheme_^#shared#^_</key>
+		<key>WorkoutEditor copy.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>WorkoutEditor.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>7361235E23573096002250AD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>737800302319359E00E33AA0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>737800422319359F00E33AA0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7378004D2319359F00E33AA0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

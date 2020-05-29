@@ -137,7 +137,10 @@ class JSONImporter{
 
         if let days = jsonDict["days"] as? [[String:Any]]{
             for d in days{
-                let dString: String = d["iso8061DateString"] as! String
+                guard  let dString: String = d["iso8601DateString"] as? String else {
+                    continue
+                }
+               
                 let day: Day = Day(date: ISO8601DateFormatter().date(from: dString)!, type: d["type"] as! String, comments: d["comments"] as? String ?? "", trainingDiary: td)
                 if Calendar.current.compare(day.date, to: Calendar.current.date(from: DateComponents(year: 2005, month: 01, day: 02))!, toGranularity: .day) == ComparisonResult.orderedSame{
                     print("found that date")
