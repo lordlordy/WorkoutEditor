@@ -170,7 +170,9 @@ class JSONImporter{
         if let weights = jsonDict["weights"] as? [[String:Any]]{
             for w in weights{
                 // just set up dummy day for the save
-                let dString: String = w["iso8061DateString"] as! String
+                guard let dString: String = w["iso8601DateString"] as? String else{
+                    continue
+                }
                 let day: Day = Day(date: ISO8601DateFormatter().date(from: dString)!, type: "", comments: "", trainingDiary: td)
                 
                 WorkoutDBAccess.shared.save(reading: Reading(type: "kg", value: w["kg"] as! Double, parent: day))
