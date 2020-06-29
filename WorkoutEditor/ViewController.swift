@@ -48,50 +48,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func test(_ sender: Any){
-        if let url = OpenAndSaveDialogues().selectedPath(withTitle: "chose .json file",andFileTypes: ["json"], directory: nil) {
-            do{
-                let data: Data = try Data.init(contentsOf: url)
-                let jsonData  = try JSONSerialization.jsonObject(with: data, options: [.allowFragments, .mutableContainers])
-                
-                if let list = jsonData as? [[String: Any]]{
-                    for l in list{
-                        if let fields = l["fields"] as? [String:Any]{
-                            let df: DateFormatter = DateFormatter()
-                            df.dateFormat = "yyyy-MM-dd"
-                            let date = df.date(from: fields["date"] as! String)!
-                            let dc = Calendar.current.dateComponents([.day, .month, .year], from: date)
-                            let raceDate: Date = Calendar.current.date(from: DateComponents(year: dc.year, month: dc.month!, day: dc.day, hour: 12, minute: 0, second: 0))!
-                            let timeFormatter: NumberToTimeFormatter = NumberToTimeFormatter()
-                            let rr:  RaceResult = RaceResult(date: raceDate,
-                                                             raceNumber: 1,
-                                                             type: fields["type"] as! String,
-                                                             brand: fields["brand"] as! String,
-                                                             distance: fields["distance"] as! String,
-                                                             name: fields["name"] as! String,
-                                                             category: fields["category"] as? String ?? "",
-                                                             overallPosition: fields["overall_position"] as? Int ?? 0,
-                                                             categoryPosition: fields["category_position"] as? Int ?? 0,
-                                                             swimSeconds: Int(truncating: timeFormatter.reverseTransformedValue(fields["swim"]) as? NSNumber ?? 0),
-                                                             t1Seconds: Int(truncating: timeFormatter.reverseTransformedValue(fields["t1"]) as? NSNumber ?? 0),
-                                                             bikeSeconds: Int(truncating: timeFormatter.reverseTransformedValue(fields["bike"]) as? NSNumber ?? 0),
-                                                             t2Seconds: Int(truncating: timeFormatter.reverseTransformedValue(fields["t2"]) as? NSNumber ?? 0),
-                                                             runSeconds: Int(truncating: timeFormatter.reverseTransformedValue(fields["run"]) as? NSNumber ?? 0),
-                                                             swimKM: fields["swim_km"] as? Double ?? 0.0,
-                                                             bikeKM: fields["bike_km"] as? Double ?? 0.0,
-                                                             runKM: fields["run_km"] as? Double ?? 0.0,
-                                                             comments: fields["comments"] as! String,
-                                                             raceReport: "")
-                            WorkoutDBAccess.shared.save(raceResult: rr)
-                            
-                        }
-                    }
-                }
-                
-            } catch {
-                print("Unable to retrieve contents of \(url)")
-                print(error)
-            }
-        }
+       print("Test")
     }
     
     @IBAction func selectDatabase(_ sender: Any) {
