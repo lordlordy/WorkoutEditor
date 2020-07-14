@@ -11,6 +11,15 @@ import Foundation
 extension Date{
    
     var year: Int{ return Calendar.current.dateComponents([.year], from: self).year ?? 0 }
+    var isoFormatter: DateFormatter{
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        return formatter
+    }
+    
+    var isoFormat: String{
+        return self.isoFormatter.string(from: self)
+    }
     
     var monthAsString: String{
         let formatter = DateFormatter()

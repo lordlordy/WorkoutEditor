@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73008CEF24AB9C5100B0673F /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73008CEE24AB9C5100B0673F /* CloudKit.framework */; };
+		73008CF124ACFF1A00B0673F /* AsCloudKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73008CF024ACFF1A00B0673F /* AsCloudKitProtocol.swift */; };
+		73008CF224ACFF1A00B0673F /* AsCloudKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73008CF024ACFF1A00B0673F /* AsCloudKitProtocol.swift */; };
 		73145DEE232BDEA5009DBADF /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DED232BDEA5009DBADF /* LinkedList.swift */; };
 		73145DF0232BDEC2009DBADF /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DEF232BDEC2009DBADF /* Queue.swift */; };
 		73145DF2232BDEEB009DBADF /* RollingSumQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73145DF1232BDEEB009DBADF /* RollingSumQueue.swift */; };
@@ -97,6 +100,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		73008CEE24AB9C5100B0673F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		73008CF024ACFF1A00B0673F /* AsCloudKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsCloudKitProtocol.swift; sourceTree = "<group>"; };
 		73145DED232BDEA5009DBADF /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
 		73145DEF232BDEC2009DBADF /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		73145DF1232BDEEB009DBADF /* RollingSumQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingSumQueue.swift; sourceTree = "<group>"; };
@@ -111,7 +116,6 @@
 		733A6E4C232A8F33001087E9 /* WarehouseColumns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarehouseColumns.swift; sourceTree = "<group>"; };
 		733A6E4E232A93B9001087E9 /* SleepQualityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepQualityMapper.swift; sourceTree = "<group>"; };
 		7361238723573096002250AD /* WorkoutEditor Release.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WorkoutEditor Release.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7361238823573096002250AD /* WorkoutEditor copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "WorkoutEditor copy-Info.plist"; path = "/Users/stevenlord/Development/swift/WorkoutEditor/WorkoutEditor copy-Info.plist"; sourceTree = "<absolute>"; };
 		737800312319359E00E33AA0 /* WorkoutEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		737800342319359E00E33AA0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		737800362319359E00E33AA0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73008CEF24AB9C5100B0673F /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +181,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		73008CED24AB9C5100B0673F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				73008CEE24AB9C5100B0673F /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		737800282319359E00E33AA0 = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +198,7 @@
 				737800462319359F00E33AA0 /* WorkoutEditorTests */,
 				737800512319359F00E33AA0 /* WorkoutEditorUITests */,
 				737800322319359E00E33AA0 /* Products */,
-				7361238823573096002250AD /* WorkoutEditor copy-Info.plist */,
+				73008CED24AB9C5100B0673F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -259,6 +272,7 @@
 				73145DF5232F86C2009DBADF /* JSONProperties.swift */,
 				73145DF7232F87D2009DBADF /* JSONExporter.swift */,
 				73145DF9232FA101009DBADF /* RaceResult.swift */,
+				73008CF024ACFF1A00B0673F /* AsCloudKitProtocol.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -479,6 +493,7 @@
 				7361237623573096002250AD /* NumberToTimeFormatter.swift in Sources */,
 				7361237723573096002250AD /* Maths.swift in Sources */,
 				7361237823573096002250AD /* TrainingDiary.swift in Sources */,
+				73008CF224ACFF1A00B0673F /* AsCloudKitProtocol.swift in Sources */,
 				7361237923573096002250AD /* PeriodNode.swift in Sources */,
 				7361237A23573096002250AD /* Workout.swift in Sources */,
 				7361237B23573096002250AD /* RaceResultsViewController.swift in Sources */,
@@ -515,6 +530,7 @@
 				73EC99762328109E00FE941A /* NumberToTimeFormatter.swift in Sources */,
 				73145DF4232BDF6A009DBADF /* Maths.swift in Sources */,
 				73EC996B2327B96200FE941A /* TrainingDiary.swift in Sources */,
+				73008CF124ACFF1A00B0673F /* AsCloudKitProtocol.swift in Sources */,
 				73EC996D2327CC0500FE941A /* PeriodNode.swift in Sources */,
 				7378006C231988A200E33AA0 /* Workout.swift in Sources */,
 				73145DFF232FA55C009DBADF /* RaceResultsViewController.swift in Sources */,
@@ -721,14 +737,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = WorkoutEditor/WorkoutEditor.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = T58RJPYJ69;
 				INFOPLIST_FILE = WorkoutEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.me.stevenlord.WorkoutEditor;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.stevenlord.WorkoutEditor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -739,14 +757,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = WorkoutEditor/WorkoutEditor.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = T58RJPYJ69;
 				INFOPLIST_FILE = WorkoutEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.me.stevenlord.WorkoutEditor;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.stevenlord.WorkoutEditor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};

@@ -39,6 +39,7 @@ import Foundation
     @objc var restingHR:        Int         { get }
     @objc var sdnn:             Double      { get }
     @objc var rMSSD:            Double      { get }
+    @objc var pressUps:         Int         { get }
     @objc var unsavedChanges:   Bool        { get }
     @objc var days:             Set<Day>    { get }
     

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CloudKit
 
 @objc class Workout: NSObject{
     
@@ -16,12 +17,15 @@ import Foundation
     @objc var primaryKey: String{
         return "\(day.iso8601DateString)-\(String(workoutNumber))"
     }
+    @objc var primary_key: String{ return self.primaryKey }
     
     @objc var day: Day
     @objc var date: Date { return day.date }
     @objc var workoutNumber: Int
+    @objc var workout_number: Int { return self.workoutNumber }
     @objc var activity: String
     @objc var activityType: String
+    @objc var activity_type: String { return self.activityType }
     @objc var equipment: String
     @objc var seconds: Int{
         didSet{
@@ -35,19 +39,26 @@ import Foundation
     }
     @objc var tss: Int
     @objc var tssMethod: String
+    @objc var tss_method: String { return self.tssMethod }
     @objc var km: Double
     @objc var kj: Int
     @objc var ascentMetres: Int
+    @objc var ascent_metres: Int { return self.ascentMetres }
     @objc var reps: Int
     @objc var isRace: Bool
+    @objc var is_race: Bool { return self.isRace }
     @objc var cadence:Int
     @objc var watts: Int
     @objc var wattsEstimated: Bool
+    @objc var watts_estimated: Bool { return self.wattsEstimated }
     @objc var heartRate: Int
+    @objc var heart_rate: Int { return self.heartRate }
     @objc var isBrick: Bool
+    @objc var is_brick: Bool { return self.isBrick }
     @objc var keywords: String
     @objc dynamic var comments: String
     @objc var lastSave: Date? = nil
+    @objc var last_save: Date? { return self.lastSave }
     @objc var lastSaveString: String{
         if let d = lastSave{
             return ISO8601DateFormatter().string(from: d)
@@ -58,6 +69,13 @@ import Foundation
     
     @objc dynamic var rpeTSS: Int = 0
 
+    @objc dynamic var pressUps: Int {
+        if self.activity_type.lowercased() == "pressup"{
+            return self.reps
+        }else{
+            return 0
+        }
+    }
     
     var unsavedChanges: Bool = false
     
@@ -183,4 +201,25 @@ extension Workout{
         day.unsavedChanges = true
         self.unsavedChanges = true
     }
+}
+
+extension Workout: AsCloudKitProtocol{
+    func asCKRecord() -> CKRecord {
+
+        let record: CKRecord = CKRecord(recordType: TableName.Workout.rawValue, recordID: ckRecordID())
+        
+        for c in WorkoutColumn.allCases{
+            record.setValue(self.value(forKey: c.rawValue), forKey: c.rawValue)
+        }
+        
+        record["day"] = CKRecord.Reference(recordID: self.day.ckRecordID(), action: .deleteSelf)
+        
+        return record
+    }
+    
+    func ckRecordID() -> CKRecord.ID {
+        return CKRecord.ID(recordName: self.primaryKey, zoneID: CKRecordZone.default().zoneID)
+    }
+    
+    
 }

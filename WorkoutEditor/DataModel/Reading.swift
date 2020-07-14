@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import CloudKit
 
 class Reading: NSObject{
     
     @objc var primaryKey: String { return "\(day.iso8601DateString)-\(type)" }
+    @objc var primary_key: String { return self.primaryKey }
     @objc var date: Date{ return day.date }
     @objc var type: String
     @objc var value: Double
@@ -31,4 +33,26 @@ extension Reading{
         super.setValue(value, forKey: key)
         day.unsavedChanges = true
     }
+}
+
+extension Reading: AsCloudKitProtocol{
+    func asCKRecord() -> CKRecord {
+
+        let record: CKRecord = CKRecord(recordType: TableName.Reading.rawValue, recordID: ckRecordID())
+        
+        for c in ReadingColumn.allCases{
+            record.setValue(self.value(forKey: c.rawValue), forKey: c.rawValue)
+        }
+        
+        record["day"] = CKRecord.Reference(recordID: self.day.ckRecordID(), action: .deleteSelf)
+        
+        return record
+    }
+    
+    func ckRecordID() -> CKRecord.ID {
+        return CKRecord.ID(recordName: self.primaryKey, zoneID: CKRecordZone.default().zoneID)
+    }
+    
+    
+    
 }

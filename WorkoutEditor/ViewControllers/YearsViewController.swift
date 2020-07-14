@@ -43,7 +43,10 @@ class YearsViewController: NSViewController {
                     days = days.union(pn.days)
                 }
             }
-            let raceResults: [RaceResult] = trainingDiary?.raceResults(from: days.map({$0.date}).min()!, to: days.map({$0.date}).max()!) ?? []
+            var raceResults: [RaceResult] = []
+            if days.count > 0{
+                raceResults = trainingDiary?.raceResults(from: days.map({$0.date}).min()!, to: days.map({$0.date}).max()!) ?? []
+            }
             if let jsonString = JSONExporter().createJSON(forDays: Array(days), raceResults: raceResults){
                 do{
                     try jsonString.write(to: url, atomically: true, encoding: String.Encoding.utf8.rawValue)

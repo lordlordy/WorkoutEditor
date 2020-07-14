@@ -63,23 +63,6 @@ import Foundation
     var ctlRun: Double{ return latestPeriod()?.ctlRun ?? 0.0}
     var atlRun: Double{ return latestPeriod()?.atlRun ?? 0.0}
     var tsbRun: Double{ return ctlRun - atlRun }
-    
-//    func populate(withTSB tsb: [String: [String: (ctl: Double, atl: Double)]]){
-//        for d in dayCache.values{
-//            let total: (ctl: Double, atl: Double) = tsb["All"]?[d.iso8601DateString] ?? (0.0, 0.0)
-//            let swim: (ctl: Double, atl: Double) = tsb["Swim"]?[d.iso8601DateString] ?? (0.0, 0.0)
-//            let bike: (ctl: Double, atl: Double) = tsb["Bike"]?[d.iso8601DateString] ?? (0.0, 0.0)
-//            let run: (ctl: Double, atl: Double) = tsb["Run"]?[d.iso8601DateString] ?? (0.0, 0.0)
-//            d.ctl = total.ctl
-//            d.atl = total.atl
-//            d.ctlSwim = swim.ctl
-//            d.atlSwim = swim.atl
-//            d.ctlBike = bike.ctl
-//            d.atlBike = bike.atl
-//            d.ctlRun = run.ctl
-//            d.atlRun = run.atl
-//        }
-//    }
 
     func setNodesForRebuild(){
         monthlyNodes = nil
@@ -184,6 +167,7 @@ extension TrainingDiary: PeriodNode{
     var name: String { return "Training Diary" }
     var children: [PeriodNode] { return getNodes() }
     var childCount: Int { return children.count }
+    var pressUps: Int { return children.reduce(0, {$0 + $1.pressUps}) }
     var totalKM: Double { return children.reduce(0.0, {$0 + $1.totalKM}) }
     var totalSeconds: TimeInterval { return children.reduce(0.0, {$0 + $1.totalSeconds}) }
     var totalTSS: Int { return children.reduce(0, {$0 + $1.totalTSS}) }
@@ -335,6 +319,7 @@ extension TrainingDiary{
     
     private class PeriodNodeImplementation: NSObject, PeriodNode{
         
+        
         private var from: Date
         private var to: Date
         private var periodName: String
@@ -366,6 +351,8 @@ extension TrainingDiary{
         @objc var runKM: Double { return children.reduce(0.0, {$0 + $1.runKM}) }
         @objc var runSeconds: Double { return children.reduce(0.0, {$0 + $1.runSeconds}) }
         @objc var runTSS: Int { return children.reduce(0, {$0 + $1.runTSS}) }
+        @objc var pressUps: Int { return children.reduce(0, {$0 + $1.pressUps}) }
+
         @objc var fromDate: Date {
             let childFromDate = children.map({$0.fromDate}).sorted(by: {$0 < $1})
             if childFromDate.count > 0{
