@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CloudKit
 
 @objc class Day: NSObject{
     @objc var date: Date
@@ -133,6 +134,7 @@ extension Day: PeriodNode{
     var toDate: Date { return date }
     var isLeaf: Bool { return workoutCount == 0 }
     var leafCount: Int { return workoutCount }
+    var pressUps: Int { return workouts.reduce(0, {$0 + $1.pressUps})}
 
     @objc var sleep:            Double      { return reading(forType: "sleep")?.value ?? 0.0 }
     @objc var sleepQualityScore:Double      { return reading(forType: "sleepQualityScore")?.value ?? 0.0 }
@@ -152,4 +154,21 @@ extension Day{
         super.setValue(value, forKey: key)
         unsavedChanges = true
     }
+}
+
+extension Day: AsCloudKitProtocol{
+    
+    func asCKRecord() -> CKRecord{
+        let record: CKRecord = CKRecord(recordType: TableName.Day.rawValue, recordID: ckRecordID())
+        
+        for c in DayColumn.allCases{
+            record.setValue(self.value(forKey: c.rawValue), forKey: c.rawValue)
+        }
+        return record
+    }
+    
+    func ckRecordID() -> CKRecord.ID {
+        return CKRecord.ID(recordName: self.date.isoFormat, zoneID: CKRecordZone.default().zoneID)
+    }
+
 }

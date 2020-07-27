@@ -15,54 +15,93 @@ enum TableName: String{
     case Workout = "Workout"
 }
 
+enum DayColumn: String, CaseIterable{
+    case date = "date"
+    case type = "type"
+    case comments = "comments"
+}
+
+enum ReadingColumn: String, CaseIterable{
+    case primary_key = "primary_key"
+    case date = "date"
+    case type = "type"
+    case value = "value"
+}
+
+enum WorkoutColumn: String, CaseIterable{
+    case primary_key = "primary_key"
+    case date = "date"
+    case workout_number = "workout_number"
+    case activity = "activity"
+    case activity_type = "activity_type"
+    case equipment = "equipment"
+    case seconds = "seconds"
+    case rpe = "rpe"
+    case tss = "tss"
+    case tss_method = "tss_method"
+    case km = "km"
+    case kj = "kj"
+    case ascent_metres = "ascent_metres"
+    case reps = "reps"
+    case is_race = "is_race"
+    case cadence = "cadence"
+    case watts = "watts"
+    case watts_estimated = "watts_estimated"
+    case heart_rate = "heart_rate"
+    case is_brick = "is_brick"
+    case keywords = "keywords"
+    case comments = "comments"
+    case last_save = "last_save"
+}
+
 class WorkoutDBAccess{
     
     private let createDayTableSQL: String = """
         CREATE TABLE Day(
-          date Date NOT NULL UNIQUE,
-          type varchar (16) NOT NULL,
-          comments TEXT NOT NULL,
-          PRIMARY KEY (date)
+            \(DayColumn.date.rawValue) Date NOT NULL UNIQUE,
+            \(DayColumn.type.rawValue) varchar (16) NOT NULL,
+            \(DayColumn.comments.rawValue) TEXT NOT NULL,
+            PRIMARY KEY (\(DayColumn.date.rawValue))
         );
     """
     
     private let createReadingTableSQL: String = """
             CREATE TABLE Reading(
-                primary_key varchar(32) NOT NULL,
-                date Date NOT NULL,
-                type varchar(16) NOT NULL,
-                value REAL NOT NULL,
-                PRIMARY KEY (primary_key),
-            FOREIGN KEY (date) REFERENCES Day(date)
+                \(ReadingColumn.primary_key.rawValue) varchar(32) NOT NULL,
+                \(ReadingColumn.date.rawValue) Date NOT NULL,
+                \(ReadingColumn.type.rawValue) varchar(16) NOT NULL,
+                \(ReadingColumn.value.rawValue) REAL NOT NULL,
+                PRIMARY KEY (\(ReadingColumn.primary_key.rawValue)),
+                FOREIGN KEY (\(ReadingColumn.date.rawValue)) REFERENCES \(TableName.Day.rawValue)(\(ReadingColumn.date.rawValue))
             );
     """
     
     private let createWorkoutTableSQL: String = """
             CREATE TABLE \(TableName.Workout.rawValue)(
-                primary_key varchar(32) NOT NULL,
-                date Date NOT NULL,
-                workout_number INTEGER NOT NULL,
-                activity varchar(16) NOT NULL,
-                activity_type varchar(16) NOT NULL,
-                equipment varchar(32) NOT NULL,
-                seconds INTEGER NOT NULL,
-                rpe REAL NOT NULL,
-                tss INTEGER NOT NULL,
-                tss_method varchar(16) NOT NULL,
-                km REAL NOT NULL,
-                kj INTEGER NOT NULL,
-                ascent_metres INTEGER NOT NULL,
-                reps INTEGER NOT NULL,
-                is_race BOOLEAN NOT NULL,
-                cadence INTEGER,
-                watts INTEGER NOT NULL,
-                watts_estimated BOOLEAN NOT NULL,
-                heart_rate INTEGER NOT NULL,
-                is_brick BOOLEAN NOT NULL,
-                keywords TEXT NOT NULL,
-                comments TEXT NOT NULL,
-                last_save Date,
-                PRIMARY KEY (primary_key)
+                \(WorkoutColumn.primary_key.rawValue) varchar(32) NOT NULL,
+                \(WorkoutColumn.date.rawValue) Date NOT NULL,
+                \(WorkoutColumn.workout_number.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.activity.rawValue) varchar(16) NOT NULL,
+                \(WorkoutColumn.activity_type.rawValue) varchar(16) NOT NULL,
+                \(WorkoutColumn.equipment.rawValue) varchar(32) NOT NULL,
+                \(WorkoutColumn.seconds.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.rpe.rawValue) REAL NOT NULL,
+                \(WorkoutColumn.tss.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.tss_method.rawValue) varchar(16) NOT NULL,
+                \(WorkoutColumn.km.rawValue) REAL NOT NULL,
+                \(WorkoutColumn.kj.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.ascent_metres.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.reps.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.is_race.rawValue) BOOLEAN NOT NULL,
+                \(WorkoutColumn.cadence.rawValue) INTEGER,
+                \(WorkoutColumn.watts.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.watts_estimated.rawValue) BOOLEAN NOT NULL,
+                \(WorkoutColumn.heart_rate.rawValue) INTEGER NOT NULL,
+                \(WorkoutColumn.is_brick.rawValue) BOOLEAN NOT NULL,
+                \(WorkoutColumn.keywords.rawValue) TEXT NOT NULL,
+                \(WorkoutColumn.comments.rawValue) TEXT NOT NULL,
+                \(WorkoutColumn.last_save.rawValue) Date,
+                PRIMARY KEY (\(WorkoutColumn.primary_key.rawValue))
             );
     """
     
@@ -120,7 +159,7 @@ class WorkoutDBAccess{
         var types: [String] = []
         if let db = db(){
             var query: OpaquePointer? = nil
-            if sqlite3_prepare_v2(db, "SELECT DISTINCT(type) FROM Day", -1, &query, nil) != SQLITE_OK{
+            if sqlite3_prepare_v2(db, "SELECT DISTINCT(\(DayColumn.type.rawValue)) FROM \(TableName.Day.rawValue)", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
             }
@@ -132,10 +171,10 @@ class WorkoutDBAccess{
         return types
     }
     
-    func activities() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "activity") }
-    func activityTypes() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "activity_type") }
-    func equipmentTypes() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "equipment") }
-    func tssMethods() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: "tss_method") }
+    func activities() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: WorkoutColumn.activity.rawValue) }
+    func activityTypes() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: WorkoutColumn.activity_type.rawValue) }
+    func equipmentTypes() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: WorkoutColumn.equipment.rawValue) }
+    func tssMethods() -> [String]{ return types(forTable: "\(TableName.Workout.rawValue)", andColumn: WorkoutColumn.tss_method.rawValue) }
     func raceTypes() -> [String]{ return types(forTable: "RaceResult", andColumn: "type") }
     func raceBrands() -> [String]{ return types(forTable: "RaceResult", andColumn: "brand") }
     func raceDistances() -> [String]{ return types(forTable: "RaceResult", andColumn: "distance") }
@@ -165,7 +204,7 @@ class WorkoutDBAccess{
         var types:  Set<String> = Set<String>()
         if let db = db(){
             var query: OpaquePointer? = nil
-            if sqlite3_prepare_v2(db, "SELECT DISTINCT(type) FROM Reading", -1, &query, nil) != SQLITE_OK{
+            if sqlite3_prepare_v2(db, "SELECT DISTINCT(\(ReadingColumn.type.rawValue)) FROM \(TableName.Reading.rawValue)", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
             }
@@ -182,13 +221,13 @@ class WorkoutDBAccess{
         var sqlString: String = ""
         if exists(day: d){
             sqlString = """
-                    UPDATE Day
-                    SET type='\(d.type)', comments="\(d.comments)"
-                    WHERE date='\(df.string(from: d.date))'
-                """
+            UPDATE \(TableName.Day.rawValue)
+            SET \(DayColumn.type.rawValue)='\(d.type)', \(DayColumn.comments.rawValue)="\(d.comments)"
+            WHERE \(DayColumn.date.rawValue)='\(df.string(from: d.date))'
+            """
         }else{
             sqlString = """
-                    INSERT INTO Day (date, type, comments)
+            INSERT INTO \(TableName.Day.rawValue) (\(DayColumn.date.rawValue), \(DayColumn.type.rawValue), \(DayColumn.comments.rawValue))
                     VALUES ('\(df.string(from: d.date))', '\(d.type)', "\(d.comments)")
             """
         }
@@ -209,13 +248,13 @@ class WorkoutDBAccess{
         var sqlString: String = ""
         if exists(reading: r){
             sqlString = """
-            UPDATE Reading
-            SET value=\(r.value)
-            WHERE date='\(df.string(from: r.date))' and type='\(r.type)'
+            UPDATE \(TableName.Reading.rawValue)
+            SET \(ReadingColumn.value.rawValue)=\(r.value)
+            WHERE \(ReadingColumn.date.rawValue)='\(df.string(from: r.date))' and \(ReadingColumn.type.rawValue)='\(r.type)'
             """
         }else{
             sqlString = """
-            INSERT INTO Reading (primary_key, date, type, value)
+            INSERT INTO \(TableName.Reading.rawValue) (\(ReadingColumn.primary_key.rawValue), \(ReadingColumn.date.rawValue), \(ReadingColumn.type.rawValue), \(ReadingColumn.value.rawValue))
             VALUES ('\(r.primaryKey)','\(df.string(from: r.date))', '\(r.type)', \(r.value))
             """
         }
@@ -231,7 +270,7 @@ class WorkoutDBAccess{
         
         let deleteSQL: String = """
             DELETE FROM \(TableName.Workout.rawValue)
-            WHERE date="\(w.day.iso8601DateString)" AND workout_number=\(w.workoutNumber) AND last_save="\(ISO8601DateFormatter().string(from: lastSave))"
+        WHERE \(WorkoutColumn.date.rawValue)="\(w.day.iso8601DateString)" AND \(WorkoutColumn.workout_number.rawValue)=\(w.workoutNumber) AND \(WorkoutColumn.last_save.rawValue)="\(ISO8601DateFormatter().string(from: lastSave))"
         """
         if execute(sql: deleteSQL){
             print("DELETED \(w.description)")
@@ -246,32 +285,32 @@ class WorkoutDBAccess{
             sqlString = """
             UPDATE \(TableName.Workout.rawValue)
             SET
-            activity='\(w.activity)',
-            activity_type='\(w.activityType)',
-            equipment='\(w.equipment)',
-            seconds=\(w.seconds),
-            rpe=\(w.rpe),
-            tss=\(w.tss),
-            tss_method='\(w.tssMethod)',
-            km=\(w.km),
-            kj=\(w.kj),
-            ascent_metres=\(w.ascentMetres),
-            reps=\(w.reps),
-            is_race=\(w.isRace),
-            cadence=\(w.cadence),
-            watts=\(w.watts),
-            watts_estimated=\(w.wattsEstimated),
-            heart_rate=\(w.heartRate),
-            is_brick=\(w.isBrick),
-            keywords="\(w.keywords)",
-            comments="\(w.comments)",
-            last_save="\(ISO8601DateFormatter().string(from: Date()))"
-            WHERE date='\(df.string(from: w.date))' and workout_number=\(w.workoutNumber)
+            \(WorkoutColumn.activity.rawValue)='\(w.activity)',
+            \(WorkoutColumn.activity_type.rawValue)='\(w.activityType)',
+            \(WorkoutColumn.equipment.rawValue)='\(w.equipment)',
+            \(WorkoutColumn.seconds.rawValue)=\(w.seconds),
+            \(WorkoutColumn.rpe.rawValue)=\(w.rpe),
+            \(WorkoutColumn.tss.rawValue)=\(w.tss),
+            \(WorkoutColumn.tss_method.rawValue)='\(w.tssMethod)',
+            \(WorkoutColumn.km.rawValue)=\(w.km),
+            \(WorkoutColumn.kj.rawValue)=\(w.kj),
+            \(WorkoutColumn.ascent_metres.rawValue)=\(w.ascentMetres),
+            \(WorkoutColumn.reps.rawValue)=\(w.reps),
+            \(WorkoutColumn.is_race.rawValue)=\(w.isRace),
+            \(WorkoutColumn.cadence.rawValue)=\(w.cadence),
+            \(WorkoutColumn.watts.rawValue)=\(w.watts),
+            \(WorkoutColumn.watts_estimated.rawValue)=\(w.wattsEstimated),
+            \(WorkoutColumn.heart_rate.rawValue)=\(w.heartRate),
+            \(WorkoutColumn.is_brick.rawValue)=\(w.isBrick),
+            \(WorkoutColumn.keywords.rawValue)="\(w.keywords)",
+            \(WorkoutColumn.comments.rawValue)="\(w.comments)",
+            \(WorkoutColumn.last_save.rawValue)="\(ISO8601DateFormatter().string(from: Date()))"
+            WHERE \(WorkoutColumn.date.rawValue)='\(df.string(from: w.date))' and \(WorkoutColumn.workout_number.rawValue)=\(w.workoutNumber)
             """
         }else{
             sqlString = """
             INSERT INTO \(TableName.Workout.rawValue)
-            (primary_key, date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save)
+            (\(WorkoutColumn.primary_key.rawValue), \(WorkoutColumn.date.rawValue), \(WorkoutColumn.workout_number.rawValue), \(WorkoutColumn.activity.rawValue), \(WorkoutColumn.activity_type.rawValue), \(WorkoutColumn.equipment.rawValue), \(WorkoutColumn.seconds.rawValue), \(WorkoutColumn.rpe.rawValue), \(WorkoutColumn.tss.rawValue), \(WorkoutColumn.tss_method.rawValue), \(WorkoutColumn.km.rawValue), \(WorkoutColumn.kj.rawValue), \(WorkoutColumn.ascent_metres.rawValue), \(WorkoutColumn.reps.rawValue), \(WorkoutColumn.is_race.rawValue), \(WorkoutColumn.cadence.rawValue), \(WorkoutColumn.watts.rawValue), \(WorkoutColumn.watts_estimated.rawValue), \(WorkoutColumn.heart_rate.rawValue), \(WorkoutColumn.is_brick.rawValue), \(WorkoutColumn.keywords.rawValue), \(WorkoutColumn.comments.rawValue), \(WorkoutColumn.last_save.rawValue))
             VALUES
             ('\(w.primaryKey)', '\(df.string(from: w.date))', \(w.workoutNumber), '\(w.activity)', '\(w.activityType)', '\(w.equipment)', \(w.seconds), \(w.rpe), \(w.tss), '\(w.tssMethod)', \(w.km), \(w.kj), \(w.ascentMetres), \(w.reps), \(w.isRace), \(w.cadence), \(w.watts), \(w.wattsEstimated), \(w.heartRate), \(w.isBrick), "\(w.keywords)", "\(w.comments)", "\(ISO8601DateFormatter().string(from: Date()))")
             """
@@ -339,7 +378,7 @@ class WorkoutDBAccess{
         let start = Date()
         if let db = db(){
             var query: OpaquePointer? = nil
-            if sqlite3_prepare_v2(db, "SELECT date, type, comments FROM Day", -1, &query, nil) != SQLITE_OK{
+            if sqlite3_prepare_v2(db, "SELECT \(DayColumn.date.rawValue), \(DayColumn.type.rawValue), \(DayColumn.comments.rawValue) FROM \(TableName.Day.rawValue)", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
             }
@@ -360,7 +399,7 @@ class WorkoutDBAccess{
             sqlite3_finalize(query)
             query = nil
 
-            if sqlite3_prepare_v2(db, "SELECT date, type, value FROM Reading", -1, &query, nil) != SQLITE_OK{
+            if sqlite3_prepare_v2(db, "SELECT \(ReadingColumn.date.rawValue), \(ReadingColumn.type.rawValue), \(ReadingColumn.value.rawValue) FROM \(TableName.Reading.rawValue)", -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
             }
@@ -378,7 +417,7 @@ class WorkoutDBAccess{
             query = nil
 
             let wQuery: String = """
-                SELECT date, workout_number, activity, activity_type, equipment, seconds, rpe, tss, tss_method, km, kj, ascent_metres, reps, is_race, cadence, watts, watts_estimated, heart_rate, is_brick, keywords, comments, last_save
+            SELECT \(WorkoutColumn.date.rawValue), \(WorkoutColumn.workout_number.rawValue), \(WorkoutColumn.activity.rawValue), \(WorkoutColumn.activity_type.rawValue), \(WorkoutColumn.equipment.rawValue), \(WorkoutColumn.seconds.rawValue), \(WorkoutColumn.rpe.rawValue), \(WorkoutColumn.tss.rawValue), \(WorkoutColumn.tss_method.rawValue), \(WorkoutColumn.km.rawValue), \(WorkoutColumn.kj.rawValue), \(WorkoutColumn.ascent_metres.rawValue), \(WorkoutColumn.reps.rawValue), \(WorkoutColumn.is_race.rawValue), \(WorkoutColumn.cadence.rawValue), \(WorkoutColumn.watts.rawValue), \(WorkoutColumn.watts_estimated.rawValue), \(WorkoutColumn.heart_rate.rawValue), \(WorkoutColumn.is_brick.rawValue), \(WorkoutColumn.keywords.rawValue), \(WorkoutColumn.comments.rawValue), \(WorkoutColumn.last_save.rawValue)
                 FROM \(TableName.Workout.rawValue)
             """
             if sqlite3_prepare_v2(db, wQuery, -1, &query, nil) != SQLITE_OK{
@@ -574,6 +613,7 @@ class WorkoutDBAccess{
         
         if sqlite3_open(url.path, &db) == SQLITE_OK{
             var query: OpaquePointer? = nil
+            print(createDayTableSQL)
             if sqlite3_prepare_v2(db, createDayTableSQL, -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
@@ -586,7 +626,7 @@ class WorkoutDBAccess{
                 sqlite3_finalize(query)
                 query = nil
             }
-            
+            print(createReadingTableSQL)
             if sqlite3_prepare_v2(db, createReadingTableSQL, -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")
@@ -599,7 +639,7 @@ class WorkoutDBAccess{
                 sqlite3_finalize(query)
                 query = nil
             }
-
+            print(createWorkoutTableSQL)
             if sqlite3_prepare_v2(db, createWorkoutTableSQL, -1, &query, nil) != SQLITE_OK{
                 print("unable to prepare query")
                 print("error: \(String(cString: sqlite3_errmsg(db)))")

@@ -13,6 +13,7 @@
 // 4. When change DB update RaceResults array
 
 import Cocoa
+import CloudKit
 
 class ViewController: NSViewController {
 
@@ -47,8 +48,72 @@ class ViewController: NSViewController {
         ValueTransformer.setValueTransformer(NumberToTimeFormatter(), forName: NSValueTransformerName(rawValue: "NumberToTimeFormatter"))
     }
     
+    @IBAction func testFetch(_ sender: Any){
+        let query: CKQuery = CKQuery(recordType: "Day", predicate: NSPredicate(value: true))
+        CKContainer.default().privateCloudDatabase.perform(query, inZoneWith: nil) { (records, error) in
+            if let e = error{
+                print(e)
+            }else if let recordArray = records{
+                for r in recordArray{
+                    print(r.lastModifiedUserRecordID)
+                    print(r)
+                }
+            }
+        }
+    }
+    
     @IBAction func test(_ sender: Any){
-       print("Test")
+//       print("Test")
+//        let containerIdentifier = "iCloud.uk.stevenlord.WorkoutEditor"
+//        let container = CKContainer(identifier: containerIdentifier)
+//        let targetDate: Date = Date()
+//        let formatter: DateFormatter = DateFormatter()
+//        formatter.dateFormat = "YYYY-MM-dd"
+//        print(container)
+//        let recordID = CKRecord.ID(recordName: formatter.string(from: targetDate), zoneID: CKRecordZone.default().zoneID)
+//        let day: CKRecord = CKRecord(recordType: "Day", recordID: recordID)
+//        let workout1: CKRecord = CKRecord(recordType: "Workout")
+//        let workout2: CKRecord = CKRecord(recordType: "Workout")
+//        day["date"] = targetDate
+//        workout1["activity"] = "swim - i wish!"
+//        workout1["day"] = CKRecord.Reference(: day.recordIDrecordID, action: .deleteSelf)
+//        workout2["activity"] = "run"
+//        workout2["day"] = CKRecord.Reference(recordID: day.recordID, action: .deleteSelf)
+//
+//
+//        print(day)
+//        print(workout1)
+//        print(workout2)
+//        container.privateCloudDatabase.save(workout1, completionHandler: ckCompletion)
+//        container.privateCloudDatabase.save(workout2, completionHandler: ckCompletion)
+//        container.privateCloudDatabase.save(day, completionHandler: ckCompletion)
+        testSave()
+    }
+    
+    func testSave(){
+        let days: [Day] = trainingDiary.descendingOrderedDays(fromDate: nil)
+        if days.count > 0{
+            let targetDay: Day = days[0]
+            let container = CKContainer(identifier: "iCloud.uk.stevenlord.WorkoutEditor")
+            container.privateCloudDatabase.save(targetDay.asCKRecord(), completionHandler: ckCompletion)
+            for reading in targetDay.readings{
+                container.privateCloudDatabase.save(reading.asCKRecord(), completionHandler: ckCompletion)
+            }
+            for workout in targetDay.workouts{
+                container.privateCloudDatabase.save(workout.asCKRecord(), completionHandler: ckCompletion)
+            }
+        }else{
+            print("No days")
+        }
+    }
+    
+    func ckCompletion(record: CKRecord?, error: Error?){
+        print(record?.modificationDate ?? "no record or date")
+        print(record?.recordID ?? "no ID")
+        print(record?.recordID.recordName ?? " no id")
+        if let e = error{
+            print(e)
+        }
     }
     
     @IBAction func selectDatabase(_ sender: Any) {
