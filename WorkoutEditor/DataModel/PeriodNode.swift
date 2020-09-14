@@ -43,6 +43,9 @@ import Foundation
     @objc var unsavedChanges:   Bool        { get }
     @objc var days:             Set<Day>    { get }
     
+    @objc var swimWorkoutCount: Int         { get }
+    @objc var bikeWorkoutCount: Int         { get }
+    @objc var runWorkoutCount:  Int         { get }
     
     // Training Stress Balance values
     @objc var ctl:              Double      { get }

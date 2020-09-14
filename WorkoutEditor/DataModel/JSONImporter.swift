@@ -186,7 +186,7 @@ class JSONImporter{
 
         if let physiologicals = jsonDict["physiologicals"] as? [[String:Any]]{
             for physio in physiologicals{
-                let dString: String = physio["iso8061DateString"] as! String
+                let dString: String = physio["iso8601DateString"] as! String
                 // just set up dummy day for the save
                 let day: Day = Day(date: ISO8601DateFormatter().date(from: dString)!, type: "", comments: "", trainingDiary: td)
                 

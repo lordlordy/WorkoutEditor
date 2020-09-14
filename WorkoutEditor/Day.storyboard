@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.3"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -37,7 +37,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wR5-WD-QPt">
-                                <rect key="frame" x="5" y="357" width="19" height="20"/>
+                                <rect key="frame" x="5" y="311" width="19" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="19" id="GDo-ac-8aW"/>
                                     <constraint firstAttribute="height" constant="19" id="K7F-9M-jE6"/>
@@ -52,7 +52,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tFF-44-Wyf">
-                                <rect key="frame" x="26" y="357" width="19" height="20"/>
+                                <rect key="frame" x="26" y="311" width="19" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="19" id="05x-4U-wzD"/>
                                     <constraint firstAttribute="width" constant="19" id="Vez-ye-48i"/>
@@ -67,7 +67,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kWI-Me-S2v">
-                                <rect key="frame" x="53" y="360" width="69" height="17"/>
+                                <rect key="frame" x="53" y="314" width="69" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="65" id="0hf-XI-si9"/>
                                     <constraint firstAttribute="height" constant="17" id="3YG-AK-S5F"/>
@@ -79,7 +79,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox identifier="dayType" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n54-9X-fE0">
-                                <rect key="frame" x="962" y="353" width="153" height="26"/>
+                                <rect key="frame" x="962" y="307" width="153" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="EB6-tG-xzT"/>
                                     <constraint firstAttribute="height" constant="20" id="NFO-92-GdK"/>
@@ -95,7 +95,7 @@
                                 </connections>
                             </comboBox>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8KW-Yb-UhB">
-                                <rect key="frame" x="1114" y="355" width="58" height="22"/>
+                                <rect key="frame" x="1114" y="309" width="58" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="58" id="OlE-k2-D2b"/>
                                     <constraint firstAttribute="height" constant="21" id="nlT-PN-ioT"/>
@@ -109,7 +109,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1jl-Rj-V0i">
-                                <rect key="frame" x="1174" y="355" width="58" height="22"/>
+                                <rect key="frame" x="1174" y="309" width="58" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="67j-9X-fbw"/>
                                     <constraint firstAttribute="width" constant="58" id="vPC-36-PdM"/>
@@ -123,13 +123,13 @@
                                 </connections>
                             </button>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHk-lp-mfe">
-                                <rect key="frame" x="5" y="233" width="1230" height="119"/>
+                                <rect key="frame" x="5" y="233" width="1230" height="73"/>
                                 <clipView key="contentView" id="cKy-Do-gVT">
-                                    <rect key="frame" x="1" y="0.0" width="1228" height="103"/>
+                                    <rect key="frame" x="1" y="0.0" width="1228" height="57"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" typeSelect="NO" autosaveName="workoutTable" rowSizeStyle="automatic" headerView="Y12-Yf-L88" viewBased="YES" id="P6G-KR-Z6f">
-                                            <rect key="frame" x="0.0" y="0.0" width="1358" height="78"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1358" height="32"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -932,7 +932,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Sc2-ab-SlY">
-                                    <rect key="frame" x="1" y="103" width="1228" height="15"/>
+                                    <rect key="frame" x="1" y="57" width="1228" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="OPK-SL-b0G">

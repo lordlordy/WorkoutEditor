@@ -136,6 +136,10 @@ extension Day: PeriodNode{
     var leafCount: Int { return workoutCount }
     var pressUps: Int { return workouts.reduce(0, {$0 + $1.pressUps})}
 
+    var swimWorkoutCount: Int { return workouts.reduce(0, {$0 + $1.swimWorkoutCount}) }
+    var bikeWorkoutCount: Int { return workouts.reduce(0, {$0 + $1.bikeWorkoutCount}) }
+    var runWorkoutCount: Int { return workouts.reduce(0, {$0 + $1.runWorkoutCount}) }
+
     @objc var sleep:            Double      { return reading(forType: "sleep")?.value ?? 0.0 }
     @objc var sleepQualityScore:Double      { return reading(forType: "sleepQualityScore")?.value ?? 0.0 }
     @objc var motivation:       Double      { return reading(forType: "motivation")?.value ?? 0.0 }

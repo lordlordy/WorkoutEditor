@@ -183,6 +183,10 @@ extension TrainingDiary: PeriodNode{
     var leafCount: Int { return children.reduce(0, {$0 + $1.leafCount}) }
     var type: String { return "Diary" }
     
+    var swimWorkoutCount: Int { return children.reduce(0, {$0 + $1.swimWorkoutCount}) }
+    var bikeWorkoutCount: Int { return children.reduce(0, {$0 + $1.bikeWorkoutCount}) }
+    var runWorkoutCount: Int { return children.reduce(0, {$0 + $1.runWorkoutCount}) }
+
     @objc var sleep: Double {
         return children.count > 0 ? children.reduce(0.0, {$0 + $1.sleep}) / Double(children.count) : 0.0
     }
@@ -352,6 +356,10 @@ extension TrainingDiary{
         @objc var runSeconds: Double { return children.reduce(0.0, {$0 + $1.runSeconds}) }
         @objc var runTSS: Int { return children.reduce(0, {$0 + $1.runTSS}) }
         @objc var pressUps: Int { return children.reduce(0, {$0 + $1.pressUps}) }
+
+        @objc var swimWorkoutCount: Int { return children.reduce(0, {$0 + $1.swimWorkoutCount}) }
+        @objc var bikeWorkoutCount: Int { return children.reduce(0, {$0 + $1.bikeWorkoutCount}) }
+        @objc var runWorkoutCount: Int { return children.reduce(0, {$0 + $1.runWorkoutCount}) }
 
         @objc var fromDate: Date {
             let childFromDate = children.map({$0.fromDate}).sorted(by: {$0 < $1})

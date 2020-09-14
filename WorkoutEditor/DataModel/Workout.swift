@@ -173,6 +173,10 @@ extension Workout: PeriodNode{
     var isLeaf: Bool { return true }
     var leafCount: Int { return 0 }
     
+    var swimWorkoutCount: Int { return activity.uppercased() == "SWIM" ? 1 : 0 }
+    var bikeWorkoutCount: Int { return activity.uppercased() == "BIKE" ? 1 : 0 }
+    var runWorkoutCount: Int { return activity.uppercased() == "RUN" ? 1 : 0 }
+
     @objc var type: String {
         var s: [String] = [activity]
         if isRace{ s.append("Race") }
